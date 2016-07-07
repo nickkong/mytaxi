@@ -10,7 +10,9 @@ public class Constant {
 
     public final static boolean DEVELOPER_MODE = false;
 
-    public static String BASE_DIR = Environment.getExternalStorageDirectory().toString() + "/haodi/";
+    public final static String BASE_DIR = Environment.getExternalStorageDirectory().toString() + "/haodi/";
+
+    public final static String APP_URL = "";
 
     public final static int INIT_PAGENO = 1;
     public final static int INIT_PAGESIZE = 10;
