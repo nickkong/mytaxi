@@ -42,7 +42,7 @@
             android:value="Tbcom3iYRa3I95rE8DPbwfbw5Sa9BMeN" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" >
             <intent-filter>
