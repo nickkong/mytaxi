@@ -5,8 +5,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +22,7 @@ import com.zhtaxi.haodi.widget.CustomTimePicker;
  * 约车
  * Created by NickKong on 16/7/2.
  */
-public class YuecheFragment extends Fragment implements View.OnClickListener{
+public class YuecheFragment extends BaseFragment implements View.OnClickListener{
 
     private String TAG = getClass().getSimpleName();
 
@@ -33,9 +31,8 @@ public class YuecheFragment extends Fragment implements View.OnClickListener{
     private View ll_time,ll_move,ll_change_start,ll_change_end,ll_yueche_now,ll_yueche_future,line;
     private OnHuishouBtnClickListener listener;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_yueche, container, false);
 
         tv_yueche_now = (TextView) view.findViewById(R.id.tv_yueche_now);
@@ -64,13 +61,18 @@ public class YuecheFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
 
         switch (v.getId()){
+            //约车-现在
             case R.id.ll_yueche_now:
+                //选择“现在”标签后样式变化
                 tv_yueche_now.setTextColor(getResources().getColor(R.color.TEXT_MAIN));
                 tv_yueche_future.setTextColor(getResources().getColor(R.color.TEXT_HINT));
                 ll_yueche_now.setBackgroundResource(R.drawable.border_lefttopradius_enable);
                 ll_yueche_future.setBackgroundResource(R.drawable.border_righttopradius_disable);
+
+                //切换选择时间的动画，向下隐藏
                 ObjectAnimator downanimator = new ObjectAnimator().ofFloat(ll_move, "translationY", 0);
                 downanimator.start();
+                //动画监听
                 downanimator.addListener(new Animator.AnimatorListener() {
 
                     @Override
@@ -90,14 +92,19 @@ public class YuecheFragment extends Fragment implements View.OnClickListener{
                     }
                 });
                 break;
+            //约车-预约
             case R.id.ll_yueche_future:
+                //选择“预约”标签后样式变化
                 tv_yueche_now.setTextColor(getResources().getColor(R.color.TEXT_HINT));
                 tv_yueche_future.setTextColor(getResources().getColor(R.color.TEXT_MAIN));
                 ll_change_start.setBackgroundResource(R.drawable.border_notopbottom_noradius);
                 ll_yueche_now.setBackgroundResource(R.drawable.border_lefttopradius_disable);
                 ll_yueche_future.setBackgroundResource(R.drawable.border_righttopradius_enable);
+
+                //切换选择时间的动画，向上显示
                 ObjectAnimator upanimator = new ObjectAnimator().ofFloat(ll_move, "translationY", -ll_time.getHeight());
                 upanimator.start();
+                //动画监听
                 upanimator.addListener(new Animator.AnimatorListener() {
 
                   @Override
@@ -116,27 +123,36 @@ public class YuecheFragment extends Fragment implements View.OnClickListener{
                   }
                 });
                 break;
+            //切换挥手叫车
             case R.id.btn_change_huishou:
                 listener.doHuishou();
                 break;
+            //选择预约时间
             case R.id.ll_time:
                 showTimepicker();
                 break;
+            //选择目的地
             case R.id.ll_change_end:
                 startActivity(new Intent(getActivity(), DestinationActivity.class));
                 break;
         }
     }
 
+    /**
+     * 选择预约时间dialog
+     */
     private void showTimepicker() {
 
         CustomTimePicker customTimePicker = new CustomTimePicker(getActivity(),timePickerSubmitListener);
         customTimePicker.getWindow().setGravity(Gravity.BOTTOM);
         customTimePicker.setCanceledOnTouchOutside(false);
-        customTimePicker.getWindow().setWindowAnimations(R.style.DIALOG);  //添加动画
+        customTimePicker.getWindow().setWindowAnimations(R.style.DIALOG);
         customTimePicker.show();
     }
 
+    /**
+     * 选择预约时间回调监听，设置显示比如“今天15:00”
+     */
     private OnTimePickerSubmitListener timePickerSubmitListener = new OnTimePickerSubmitListener() {
         @Override
         public void doSubmit(String content) {
@@ -144,7 +160,9 @@ public class YuecheFragment extends Fragment implements View.OnClickListener{
         }
     };
 
-
+    /**
+     * 绑定监听，告知父activity切换成挥手叫车状态
+     */
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

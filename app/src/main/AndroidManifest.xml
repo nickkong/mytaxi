@@ -64,5 +64,8 @@
         <activity android:name=".ui.activity.MeActivity"
             android:theme="@style/MyTheme"
             android:screenOrientation="portrait"/>
+
+        <meta-data android:value="577db8e467e58e8000002f53" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="Wandoujia" android:name="UMENG_CHANNEL"/>
     </application>
 </manifest>

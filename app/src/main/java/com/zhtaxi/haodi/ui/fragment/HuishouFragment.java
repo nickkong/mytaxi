@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +17,13 @@ import com.zhtaxi.haodi.ui.listener.OnYuecheBtnClickListener;
  * 挥手叫车
  * Created by NickKong on 16/7/2.
  */
-public class HuishouFragment extends Fragment implements View.OnClickListener{
+public class HuishouFragment extends BaseFragment implements View.OnClickListener{
 
     public TextView address_start;
-    private Vibrator vibrator;
     private OnYuecheBtnClickListener listener;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_huishou, container, false);
 
         Button btn_change_yueche = (Button) view.findViewById(R.id.btn_change_yueche);
@@ -55,7 +51,7 @@ public class HuishouFragment extends Fragment implements View.OnClickListener{
      * 开启振动
      */
     private void doVibrator(){
-        vibrator = (Vibrator)getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
         long [] pattern = {0,20,0,0};
         vibrator.vibrate(pattern,-1);
     }

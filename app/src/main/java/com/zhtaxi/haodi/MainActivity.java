@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -29,7 +30,9 @@ import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.umeng.analytics.MobclickAgent;
 import com.zhtaxi.haodi.service.LocationService;
+import com.zhtaxi.haodi.ui.activity.BaseActivity;
 import com.zhtaxi.haodi.ui.activity.MeActivity;
 import com.zhtaxi.haodi.ui.activity.MessageActivity;
 import com.zhtaxi.haodi.ui.fragment.HuishouFragment;
@@ -48,13 +51,15 @@ import java.util.Random;
  * 主界面，默认显示挥手叫车
  * Created by NickKong on 16/7/2.
  */
-public class MainActivity extends FragmentActivity implements OnClickListener,OnYuecheBtnClickListener,OnHuishouBtnClickListener {
+public class MainActivity extends BaseActivity implements OnClickListener,
+                    OnYuecheBtnClickListener,OnHuishouBtnClickListener {
 
     private String TAG = getClass().getSimpleName();
 
     private static final int APPEAR_DELAY = 2000;
     private static final int DISAPPEAR_DELAY = 2500;
 
+    private long exitTime = 0;
     private LocationService locationService;
     private CustomViewPager vp_control;
     private List<Fragment> pages;
@@ -80,12 +85,14 @@ public class MainActivity extends FragmentActivity implements OnClickListener,On
 
         initWelcomePage();
 
+        MobclickAgent.enableEncrypt(true);
     }
 
     /**
      * 初始化控件
      */
-    private void initView(){
+    @Override
+    public void initView(){
 
         Button requestLocButton = (Button) findViewById(R.id.btn_getlocation);
         Button btn_message = (Button) findViewById(R.id.btn_message);
@@ -191,10 +198,10 @@ public class MainActivity extends FragmentActivity implements OnClickListener,On
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_message:
-                startActivity(new Intent(this, MessageActivity.class));
+                startActivity(new Intent(this, MessageActivity.class),false);
                 break;
             case R.id.btn_me:
-                startActivity(new Intent(this, MeActivity.class));
+                startActivity(new Intent(this, MeActivity.class),false);
                 break;
         }
     }
@@ -311,6 +318,26 @@ public class MainActivity extends FragmentActivity implements OnClickListener,On
         mBaiduMap.addOverlay(makeroption6);
     }
 
+    /**
+     * 按两次手机返回键退出程序
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                MobclickAgent.onKillProcess(this);
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     @Override
     protected void onStart() {
         locationService = ((HaodiApplication)getApplication()).locationService;
@@ -328,13 +355,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener,On
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         mMapView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         mMapView.onResume();
         super.onResume();
     }
