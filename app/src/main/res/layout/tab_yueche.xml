@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/TRANSPARENT">
+
+    <!--底部操作栏 约车-->
+    <RelativeLayout
+        android:id="@id/control_yueche"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@id/ll_change_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/interval_D"
+            android:paddingRight="@dimen/interval_D"
+            android:paddingBottom="@dimen/interval_E"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@id/btn_yueche"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/inputbar"
+                android:background="@drawable/border_leftbottomradius"
+                android:textColor="@color/white"
+                android:textSize="@dimen/F5"
+                android:layout_weight="1"
+                android:text="呼叫出租车"/>
+            <Button
+                android:id="@id/btn_change_huishou"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/inputbar"
+                android:background="@drawable/border_rightbottomradius"
+                android:textColor="@color/white"
+                android:textSize="@dimen/F5"
+                android:layout_weight="2.5"
+                android:text="挥手"/>
+        </LinearLayout>
+
+        <!--目的地地址-->
+        <LinearLayout
+            android:id="@id/ll_change_end"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/inputbar"
+            android:background="@drawable/border_notopbottom_noradius"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/interval_D"
+            android:layout_marginRight="@dimen/interval_D"
+            android:paddingLeft="@dimen/interval_C"
+            android:paddingRight="@dimen/interval_C"
+            android:layout_above="@id/ll_change_bottom">
+
+            <include layout="@layout/line"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/end"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:id="@id/address_end"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/interval_D"
+                    android:hint="您要去哪儿"
+                    android:textColorHint="@color/MAIN"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/F9"
+                    android:textColor="@color/TEXT_FOUR"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_move"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_above="@id/ll_change_end">
+            <LinearLayout
+                android:layout_width="110dp"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/interval_D">
+
+                <LinearLayout
+                    android:id="@id/ll_yueche_now"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_lefttopradius_enable"
+                    android:gravity="center"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@id/tv_yueche_now"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="现在"
+                        android:textColor="@color/TEXT_MAIN"
+                        android:textSize="@dimen/F11"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/ll_yueche_future"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_righttopradius_disable"
+                    android:gravity="center"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@id/tv_yueche_future"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="预约"
+                        android:textColor="@color/TEXT_HINT"
+                        android:textSize="@dimen/F11"
+                        android:gravity="center"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--预约时间-->
+            <LinearLayout
+                android:id="@id/ll_time"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/inputbar"
+                android:clickable="false"
+                android:orientation="vertical"
+                android:background="@drawable/border_notopbottom_rightradius"
+                android:layout_marginLeft="@dimen/interval_D"
+                android:layout_marginRight="@dimen/interval_D"
+                android:paddingLeft="@dimen/interval_C"
+                android:paddingRight="@dimen/interval_C">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="出发时间"
+                        android:gravity="center"
+                        android:textColor="@color/TEXT_SUB"
+                        android:textSize="@dimen/F13"/>
+                    <TextView
+                        android:id="@id/tv_yueche_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/F10"
+                        android:gravity="center"
+                        android:textColor="@color/TEXT_FOUR"
+                        android:text="请选择何时出发"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+        <!--当前地址-->
+        <LinearLayout
+            android:id="@id/ll_change_start"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/inputbar"
+            android:background="@drawable/border_notopbottom_rightradius"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/interval_D"
+            android:layout_marginRight="@dimen/interval_D"
+            android:paddingLeft="@dimen/interval_C"
+            android:paddingRight="@dimen/interval_C"
+            android:layout_above="@id/ll_change_end"
+            android:visibility="visible">
+
+            <include layout="@layout/line"
+                android:id="@+id/line"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/start"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@id/address_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/interval_D"
+                    android:textSize="@dimen/F9"
+                    android:textColor="@color/TEXT_FOUR"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/TRANSPARENT">
+
+
+    <!--底部操作栏 挥手-->
+    <LinearLayout
+        android:id="@id/control_huishou"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <!--当前地址-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/inputbar"
+            android:background="@drawable/border_topradius"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/interval_D"
+            android:layout_marginRight="@dimen/interval_D">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/start"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/interval_C"/>
+            <TextView
+                android:id="@id/address_start"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/interval_D"
+                android:textSize="@dimen/F9"
+                android:textColor="@color/TEXT_FOUR"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/interval_D"
+            android:paddingRight="@dimen/interval_D"
+            android:paddingBottom="@dimen/interval_E">
+
+            <Button
+                android:id="@id/btn_huishou"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/inputbar"
+                android:background="@drawable/border_leftbottomradius"
+                android:textColor="@color/white"
+                android:textSize="@dimen/F5"
+                android:layout_weight="1"
+                android:text="挥手叫车"/>
+            <Button
+                android:id="@id/btn_change_yueche"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/inputbar"
+                android:background="@drawable/border_rightbottomradius"
+                android:textColor="@color/white"
+                android:textSize="@dimen/F5"
+                android:layout_weight="2.5"
+                android:text="约车"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

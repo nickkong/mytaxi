@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item type="id" name="titlebar"/>
+    <item type="id" name="btn_getlocation"/>
+    <item type="id" name="address_start"/>
+    <item type="id" name="address_end"/>
+    <item type="id" name="btn_back"/>
+    <item type="id" name="area"/>
+    <item type="id" name="btn_message"/>
+    <item type="id" name="btn_me"/>
+    <item type="id" name="iv_head"/>
+    <item type="id" name="iv_welcome"/>
+    <item type="id" name="control_huishou"/>
+    <item type="id" name="control_yueche"/>
+    <item type="id" name="vp_control"/>
+    <item type="id" name="ll_time"/>
+    <item type="id" name="tv_yueche_now"/>
+    <item type="id" name="tv_yueche_future"/>
+    <item type="id" name="ll_yueche_now"/>
+    <item type="id" name="ll_yueche_future"/>
+    <item type="id" name="btn_change_huishou"/>
+    <item type="id" name="btn_change_yueche"/>
+    <item type="id" name="btn_yueche"/>
+    <item type="id" name="btn_huishou"/>
+    <item type="id" name="ll_change_bottom"/>
+    <item type="id" name="ll_change_start"/>
+    <item type="id" name="ll_change_end"/>
+    <item type="id" name="ll_cancel"/>
+    <item type="id" name="ll_submit"/>
+    <item type="id" name="tv_yueche_time"/>
+</resources>

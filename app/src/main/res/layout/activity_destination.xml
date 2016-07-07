@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:background="@color/TEXT_MAIN">
+
+        <Button
+            android:id="@id/btn_back"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@color/TRANSPARENT"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/F9"
+            android:textColor="@color/MAIN"
+            android:layout_marginRight="@dimen/interval_E"
+            android:text="取消"/>
+
+        <Button
+            android:id="@id/area"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@color/TRANSPARENT"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/F9"
+            android:textColor="@color/TEXT_SUB"
+            android:layout_marginLeft="@dimen/interval_E"
+            android:text="珠海"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/btn_back"
+            android:layout_toRightOf="@id/area"
+            android:background="@drawable/border_normal"
+            android:layout_margin="@dimen/interval_E"
+            android:hint="您要去哪儿"
+            android:textColor="@color/TEXT_HINT"
+            android:textColorHint="@color/TEXT_SUB"
+            android:paddingLeft="@dimen/interval_B"
+            android:textSize="@dimen/F9"/>
+
+    </RelativeLayout>
+
+    <include layout="@layout/line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border_noradius_left"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="家"
+                android:textColor="@color/TEXT_SUB"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border_noradius_right"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="公司"
+                android:textColor="@color/TEXT_SUB"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.zhtaxi.haodi.widget.pulltoRefreshAndLoad.PullToRefreshLayout
+        android:id="@+id/refresh_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <include layout="@layout/refresh_head" />
+
+        <com.zhtaxi.haodi.widget.pulltoRefreshAndLoad.PullableListView
+            android:id="@+id/content_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/TEXT_BG"
+            android:divider="@color/LIST_DIVIDER"
+            android:dividerHeight="0dp"
+            android:listSelector="@color/TRANSPARENT">
+
+        </com.zhtaxi.haodi.widget.pulltoRefreshAndLoad.PullableListView>
+        <include layout="@layout/load_more" />
+    </com.zhtaxi.haodi.widget.pulltoRefreshAndLoad.PullToRefreshLayout>
+</LinearLayout>

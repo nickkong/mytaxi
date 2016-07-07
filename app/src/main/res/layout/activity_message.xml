@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/TEXT_BG">
+
+    <RelativeLayout
+        android:id="@id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:background="@color/TEXT_MAIN">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_message"
+            android:textColor="@color/white"
+            android:textSize="@dimen/F3"
+            android:layout_centerInParent="true"/>
+
+        <Button
+            android:id="@id/btn_back"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@color/TRANSPARENT"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/F7"
+            android:textColor="@color/TEXT_SUB"
+            android:layout_marginLeft="@dimen/interval_E"
+            android:text="返回"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单消息"
+            android:textColor="@color/TEXT_MAIN"
+            android:textSize="@dimen/F7"
+            android:layout_margin="@dimen/interval_B"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2016-05-22 10:23:21"
+            android:textColor="@color/TEXT_SUB"
+            android:textSize="@dimen/F9"
+            android:layout_marginLeft="@dimen/interval_B"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="就科林费斯大家考虑到撒酒疯考虑的撒酒疯可垃圾独守空房老家啊圣诞快乐分接受打卡"
+            android:layout_margin="@dimen/interval_B"
+            android:textColor="@color/TEXT_MAIN"
+            android:textSize="@dimen/F7"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单消息"
+            android:textColor="@color/TEXT_MAIN"
+            android:textSize="@dimen/F7"
+            android:layout_margin="@dimen/interval_B"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2016-05-22 10:23:21"
+            android:textColor="@color/TEXT_SUB"
+            android:textSize="@dimen/F8"
+            android:layout_marginLeft="@dimen/interval_B"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="就科林费斯大家考虑到撒酒疯考虑的撒酒疯可垃圾独守空房老家啊圣诞快乐分接受打卡"
+            android:layout_margin="@dimen/interval_B"
+            android:textColor="@color/TEXT_MAIN"
+            android:textSize="@dimen/F7"/>
+    </LinearLayout>
+</LinearLayout>

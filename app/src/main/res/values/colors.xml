@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#444444</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="TRANSPARENT">#00000000</color>
+    <color name="MAIN">#ffa726</color>
+    <color name="MAIN_SUB">#9ccc65</color>
+    <color name="MAIN_START">#ff6a3f</color>
+    <color name="MAIN_TRANSPARENT">#ccfd6c47</color>
+    <color name="MAIN_PRESSED">#c95639</color>
+    <color name="MAIN_ENABLE">#f7af9c</color>
+    <color name="TEXT_MAIN">#444444</color>
+    <color name="TEXT_SUB">#999999</color>
+    <color name="TEXT_THD">#888888</color>
+    <color name="TEXT_FOUR">#666666</color>
+    <color name="TEXT_HINT">#cccccc</color>
+    <color name="TITLE_SUB">#f8f8f8</color>
+    <color name="HIGHLIGHT">#ff4141</color>
+    <color name="LIST_DIVIDER">#c7c7cc</color>
+    <color name="TEXT_BG">#eeeeee</color>
+    <color name="TEXT_BG_SUB">#fafafa</color>
+    <color name="CLASSIFY_BG">#e3e3e3</color>
+    <color name="DIALOG_NO">#e6e6e6</color>
+    <color name="DIALOG_NO_PRESSED">#d6d6d6</color>
+    <color name="BORDER">#e7e7e7</color>
+    <color name="BACKGROUND">#eeeeee</color>
+    <color name="ADDRESS_BG">#fffaf4</color>
+    <color name="BANKCARD_BG">#c75056</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="blue">#0000ff</color>
+    <color name="zoomphoto_bg">#191919</color>
+</resources>

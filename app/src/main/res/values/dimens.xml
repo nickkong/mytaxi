@@ -1,0 +1,33 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="maintitle">45dp</dimen>
+    <dimen name="inputbar">44dp</dimen>
+
+    <dimen name="F0">26sp</dimen>
+    <dimen name="F1">24sp</dimen>
+    <dimen name="F2">22sp</dimen>
+    <dimen name="F3">20sp</dimen>
+    <dimen name="F4">19sp</dimen>
+    <dimen name="F5">18sp</dimen>
+    <dimen name="F6">17sp</dimen>
+    <dimen name="F7">16sp</dimen>
+    <dimen name="F8">15sp</dimen>
+    <dimen name="F9">14sp</dimen>
+    <dimen name="F10">13sp</dimen>
+    <dimen name="F11">12sp</dimen>
+    <dimen name="F12">11sp</dimen>
+    <dimen name="F13">10sp</dimen>
+    <dimen name="F14">9sp</dimen>
+    <dimen name="F15">8sp</dimen>
+
+    <dimen name="interval_A">14dp</dimen>
+    <dimen name="interval_B">12dp</dimen>
+    <dimen name="interval_C">10dp</dimen>
+    <dimen name="interval_D">8dp</dimen>
+    <dimen name="interval_E">6dp</dimen>
+
+    <dimen name="corner_radius">3dp</dimen>
+
+</resources>
