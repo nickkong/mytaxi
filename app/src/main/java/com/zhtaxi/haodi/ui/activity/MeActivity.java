@@ -12,6 +12,8 @@ import com.zhtaxi.haodi.R;
  */
 public class MeActivity extends BaseActivity implements View.OnClickListener{
 
+    private String TAG = getClass().getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +33,9 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_back:
-                finish();
+                doFinish();
                 break;
         }
     }
+
 }

@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 
 import com.umeng.analytics.MobclickAgent;
-import com.zhtaxi.haodi.R;
 
 /**
  * 基类
@@ -22,25 +22,58 @@ public abstract class BaseActivity extends FragmentActivity{
 
     protected void startActivity(Intent intent, boolean flag) {
         startActivity(intent);
-        overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
+        activityAnimation();
         if (flag) finish();
     }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
-        overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
+        activityAnimation();
     }
 
     protected abstract void initView();
 
+    /**
+     * 带返回动画的关闭页面
+     */
+    protected void doFinish(){
+        finish();
+        activityAnimation();
+    }
 
+    /**
+     * 带返回动画的返回键关闭页面
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            finish();
+            activityAnimation();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 设置页面跳转动画
+     */
+    private void activityAnimation(){
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    /**
+     * 友盟页面统计
+     */
     @Override
     public void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
     }
-
+    /**
+     * 友盟页面统计
+     */
     @Override
     public void onPause() {
         super.onPause();

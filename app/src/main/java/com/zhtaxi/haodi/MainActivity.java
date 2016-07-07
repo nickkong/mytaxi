@@ -367,7 +367,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         // 关闭定位图层
         mBaiduMap.setMyLocationEnabled(false);
         mMapView.onDestroy();

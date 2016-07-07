@@ -32,7 +32,7 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
 
         switch (v.getId()){
             case R.id.btn_back:
-                finish();
+                doFinish();
                 break;
         }
 

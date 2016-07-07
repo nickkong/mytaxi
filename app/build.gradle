@@ -38,8 +38,8 @@ android {
         applicationId "com.zhtaxi.haodi"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 102
-        versionName "1.0.2"
+        versionCode 103
+        versionName "1.0.3"
     }
     lintOptions {
         abortOnError false

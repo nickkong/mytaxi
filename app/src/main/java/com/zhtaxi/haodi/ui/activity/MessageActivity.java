@@ -28,7 +28,7 @@ public class MessageActivity extends BaseActivity{
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                doFinish();
             }
         });
     }
