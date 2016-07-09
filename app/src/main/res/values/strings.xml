@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">好的</string>
     <string name="title_message">消息中心</string>
+    <string name="title_personalinfo">个人资料</string>
+    <string name="title_setting">设置</string>
 
     <string name="update_tips">发现最新版本，是否更新?</string>
 

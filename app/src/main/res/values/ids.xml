@@ -29,4 +29,7 @@
     <item type="id" name="ll_cancel"/>
     <item type="id" name="ll_submit"/>
     <item type="id" name="tv_yueche_time"/>
+    <item type="id" name="rl_topersonalinfo"/>
+    <item type="id" name="rl_tosetting"/>
+    <item type="id" name="ll_back"/>
 </resources>

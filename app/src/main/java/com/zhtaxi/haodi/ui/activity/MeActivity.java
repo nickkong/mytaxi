@@ -1,5 +1,6 @@
 package com.zhtaxi.haodi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,10 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
     public void initView() {
         Button btn_back = (Button) findViewById(R.id.btn_back);
         btn_back.setOnClickListener(this);
+        View rl_topersonalinfo = findViewById(R.id.rl_topersonalinfo);
+        rl_topersonalinfo.setOnClickListener(this);
+        View rl_tosetting = findViewById(R.id.rl_tosetting);
+        rl_tosetting.setOnClickListener(this);
     }
 
     @Override
@@ -34,6 +39,12 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
         switch (v.getId()){
             case R.id.btn_back:
                 doFinish();
+                break;
+            case R.id.rl_topersonalinfo:
+                startActivity(new Intent(this,PersonalInfoActivity.class),false);
+                break;
+            case R.id.rl_tosetting:
+                startActivity(new Intent(this,SettingActivity.class),false);
                 break;
         }
     }

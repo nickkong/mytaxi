@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/TEXT_BG">
+
+    <RelativeLayout
+        android:id="@id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:background="@color/TEXT_MAIN">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_setting"
+            android:textColor="@color/white"
+            android:textSize="@dimen/F3"
+            android:layout_centerInParent="true"/>
+
+        <Button
+            android:id="@id/btn_back"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@color/TRANSPARENT"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/F7"
+            android:textColor="@color/TEXT_SUB"
+            android:layout_marginLeft="@dimen/interval_E"
+            android:text="返回"
+            android:visibility="gone"/>
+
+        <include layout="@layout/backup"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:layout_marginTop="@dimen/interval_A"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="常用地址"
+            android:textSize="@dimen/F8"
+            android:textColor="@color/TEXT_MAIN"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/interval_A"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/interval_A">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/TEXT_HINT"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/interval_E"
+                android:background="@mipmap/go"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="意见反馈"
+            android:textSize="@dimen/F8"
+            android:textColor="@color/TEXT_MAIN"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/interval_A"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/interval_A">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/TEXT_HINT"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/interval_E"
+                android:background="@mipmap/go"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="版本更新"
+            android:textSize="@dimen/F8"
+            android:textColor="@color/TEXT_MAIN"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/interval_A"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/interval_A">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="v1.0.3"
+                android:textColor="@color/TEXT_HINT"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/interval_E"
+                android:background="@mipmap/go"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:layout_marginTop="@dimen/interval_A"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关于好的"
+            android:textSize="@dimen/F8"
+            android:textColor="@color/TEXT_MAIN"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/interval_A"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/interval_A">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/TEXT_HINT"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/interval_E"
+                android:background="@mipmap/go"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:layout_marginTop="@dimen/interval_A"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出登录"
+            android:textSize="@dimen/F8"
+            android:textColor="@color/TEXT_MAIN"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+</LinearLayout>
