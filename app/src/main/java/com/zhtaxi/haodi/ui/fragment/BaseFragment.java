@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 /**
- * 基类
+ * Fragment基类
  * Created by NickKong on 16/7/7.
  */
 public class BaseFragment extends Fragment{
@@ -16,12 +16,20 @@ public class BaseFragment extends Fragment{
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * 重写跳转页面方法
+     * 主要是统一切换动画
+     */
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
         activityAnimation();
     }
 
+    /**
+     * 重写带返回参数的跳转页面方法
+     * 主要是统一切换动画
+     */
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);

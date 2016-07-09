@@ -21,6 +21,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         initView();
     }
 
+    /**
+     * 初始化控件
+     */
     @Override
     protected void initView() {
 
@@ -32,6 +35,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
 
         switch (v.getId()){
+            //返回
             case R.id.ll_back:
                 doFinish();
                 break;

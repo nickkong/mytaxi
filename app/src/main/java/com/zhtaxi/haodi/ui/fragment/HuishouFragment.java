@@ -24,8 +24,8 @@ public class HuishouFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //初始化控件
         View view = inflater.inflate(R.layout.tab_huishou, container, false);
-
         Button btn_change_yueche = (Button) view.findViewById(R.id.btn_change_yueche);
         btn_change_yueche.setOnClickListener(this);
         Button btn_huishou = (Button) view.findViewById(R.id.btn_huishou);
@@ -38,9 +38,11 @@ public class HuishouFragment extends BaseFragment implements View.OnClickListene
     public void onClick(View v) {
 
         switch (v.getId()){
+            //切换约车页面
             case R.id.btn_change_yueche:
                 listener.doYueche();
                 break;
+            //挥手叫车
             case R.id.btn_huishou:
                 doVibrator();
                 break;
@@ -56,6 +58,9 @@ public class HuishouFragment extends BaseFragment implements View.OnClickListene
         vibrator.vibrate(pattern,-1);
     }
 
+    /**
+     * 绑定监听，告知父activity切换成约车状态
+     */
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

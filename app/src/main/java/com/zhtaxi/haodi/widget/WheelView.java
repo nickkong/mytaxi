@@ -23,18 +23,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Author: wangjie
- * Email: tiantian.china.2@gmail.com
- * Date: 7/1/14.
+ * 自定义滚轮选择控件
+ * Created by NickKong on 16/7/7.
  */
 public class WheelView extends ScrollView {
-    public static final String TAG = WheelView.class.getSimpleName();
+
+    private String TAG = WheelView.class.getSimpleName();
 
     public static class OnWheelViewListener {
         public void onSelected(int selectedIndex, String item) {
         }
     }
-
 
     private Context context;
 //    private ScrollView scrollView;
@@ -80,7 +79,6 @@ public class WheelView extends ScrollView {
         initData();
 
     }
-
 
     public static final int OFF_SET_DEFAULT = 1;
     int offset = OFF_SET_DEFAULT; // 偏移量（需要在最前面和最后面补全）

@@ -17,9 +17,9 @@ public class HaodiApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //初始化定位
+        //初始化百度地图定位
         locationService = new LocationService(this);
-        // 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
+        //百度地图，在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
         SDKInitializer.initialize(this);
 
 

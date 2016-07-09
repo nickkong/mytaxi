@@ -24,6 +24,9 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
         initView();
     }
 
+    /**
+     * 初始化控件
+     */
     @Override
     public void initView() {
         Button btn_back = (Button) findViewById(R.id.btn_back);
@@ -37,12 +40,15 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            //返回
             case R.id.btn_back:
                 doFinish();
                 break;
+            //跳转个人资料页面
             case R.id.rl_topersonalinfo:
                 startActivity(new Intent(this,PersonalInfoActivity.class),false);
                 break;
+            //跳转设置页面
             case R.id.rl_tosetting:
                 startActivity(new Intent(this,SettingActivity.class),false);
                 break;

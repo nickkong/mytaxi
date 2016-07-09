@@ -21,6 +21,9 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
 
     }
 
+    /**
+     * 初始化控件
+     */
     @Override
     protected void initView() {
 
@@ -32,6 +35,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
 
         switch (v.getId()){
+            //返回
             case R.id.ll_back:
                 doFinish();
                 break;

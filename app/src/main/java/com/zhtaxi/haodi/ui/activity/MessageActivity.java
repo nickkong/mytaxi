@@ -18,9 +18,11 @@ public class MessageActivity extends BaseActivity{
         setContentView(R.layout.activity_message);
 
         initView();
-
     }
 
+    /**
+     * 初始化控件
+     */
     @Override
     public void initView() {
         View ll_back = findViewById(R.id.ll_back);

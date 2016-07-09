@@ -28,13 +28,18 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
 
     public TextView address_start,tv_yueche_time;
     private TextView tv_yueche_now,tv_yueche_future;
-    private View ll_time,ll_move,ll_change_start,ll_change_end,ll_yueche_now,ll_yueche_future,line;
+    private View ll_time;
+    private View ll_move;
+    private View ll_change_start;
+    private View ll_yueche_now;
+    private View ll_yueche_future;
+    private View line;
     private OnHuishouBtnClickListener listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //初始化控件
         View view = inflater.inflate(R.layout.tab_yueche, container, false);
-
         tv_yueche_now = (TextView) view.findViewById(R.id.tv_yueche_now);
         tv_yueche_future = (TextView) view.findViewById(R.id.tv_yueche_future);
         Button btn_change_huishou = (Button) view.findViewById(R.id.btn_change_huishou);
@@ -47,7 +52,7 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
         ll_move = view.findViewById(R.id.ll_move);
         line = view.findViewById(R.id.line);
         line.setVisibility(View.GONE);
-        ll_change_end = view.findViewById(R.id.ll_change_end);
+        View ll_change_end = view.findViewById(R.id.ll_change_end);
         ll_change_end.setOnClickListener(this);
         ll_change_start = view.findViewById(R.id.ll_change_start);
         ll_yueche_now = view.findViewById(R.id.ll_yueche_now);

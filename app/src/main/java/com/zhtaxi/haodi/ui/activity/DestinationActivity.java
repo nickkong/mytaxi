@@ -21,6 +21,9 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
         initView();
     }
 
+    /**
+     * 初始化控件
+     */
     @Override
     public void initView() {
         Button btn_back = (Button) findViewById(R.id.btn_back);
@@ -31,6 +34,7 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
 
         switch (v.getId()){
+            //返回
             case R.id.btn_back:
                 doFinish();
                 break;

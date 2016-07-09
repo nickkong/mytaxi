@@ -19,14 +19,16 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * 自定义时间选择器
+ * Created by NickKong on 16/7/7.
+ */
 public class CustomTimePicker extends Dialog implements View.OnClickListener{
 
     private String TAG = getClass().getSimpleName();
 
     private String hour,minute;
-    private WheelView wva1,wva2,wva3;
-    private View ll_cancel,ll_submit;
+    private WheelView wv_date, wv_hour, wv_minute;
     private OnTimePickerSubmitListener timePickerSubmitListener;
 
     private static final String[] DATE = new String[]{"今天","明天"};
@@ -40,21 +42,15 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
     private Context context;
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.ll_cancel:
-                dismiss();
-                break;
-            case R.id.ll_submit:
-                String hour = wva2.getSeletedItem().replace("点","");
-                String minute = wva3.getSeletedItem().replace("分","");
-                timePickerSubmitListener.doSubmit(wva1.getSeletedItem()+" "+hour+":"+minute);
-                dismiss();
-                break;
-        }
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        init();
     }
 
+    /**
+     * 构造函数
+     */
     public CustomTimePicker(Context context, OnTimePickerSubmitListener timePickerSubmitListener) {
         super(context,R.style.dialog_full);
 
@@ -75,52 +71,48 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        init();
-    }
-
+    /**
+     * 初始化控件
+     */
     private void init() {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         final LinearLayout dialog = (LinearLayout) inflater.inflate(R.layout.dialog_timepicker, null);
 
-        ll_cancel = dialog.findViewById(R.id.ll_cancel);
+        View ll_cancel = dialog.findViewById(R.id.ll_cancel);
         ll_cancel.setOnClickListener(this);
-        ll_submit = dialog.findViewById(R.id.ll_submit);
+        View ll_submit = dialog.findViewById(R.id.ll_submit);
         ll_submit.setOnClickListener(this);
 
-        wva1 = (WheelView) dialog.findViewById(R.id.main1);
-        wva2 = (WheelView) dialog.findViewById(R.id.main2);
-        wva3 = (WheelView) dialog.findViewById(R.id.main3);
+        wv_date = (WheelView) dialog.findViewById(R.id.date);
+        wv_hour = (WheelView) dialog.findViewById(R.id.hour);
+        wv_minute = (WheelView) dialog.findViewById(R.id.minute);
 
-        wva1.setOffset(1);
-        wva1.setItems(Arrays.asList(DATE));
-        wva1.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+        wv_date.setOffset(1);
+        wv_date.setItems(Arrays.asList(DATE));
+        wv_date.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, String item) {
                 Log.d(TAG, "selectedIndex: " + selectedIndex + ", item: " + item);
                 if(selectedIndex==1){
-                    wva2.setItems(hour_list);
+                    wv_hour.setItems(hour_list);
                 }
                 if(selectedIndex==2){
-                    wva2.setItems(Arrays.asList(HOUR));
+                    wv_hour.setItems(Arrays.asList(HOUR));
                 }
             }
         });
-        wva2.setOffset(1);
-        wva2.setItems(hour_list);
-        wva2.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+        wv_hour.setOffset(1);
+        wv_hour.setItems(hour_list);
+        wv_hour.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, String item) {
                 Log.d(TAG, "selectedIndex: " + selectedIndex + ", item: " + item);
             }
         });
-        wva3.setOffset(1);
-        wva3.setItems(Arrays.asList(MINUTE));
-        wva3.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+        wv_minute.setOffset(1);
+        wv_minute.setItems(Arrays.asList(MINUTE));
+        wv_minute.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, String item) {
                 Log.d(TAG, "selectedIndex: " + selectedIndex + ", item: " + item);
@@ -130,6 +122,23 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
         setContentView(dialog, params);
         getWindow().getAttributes().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            //取消预约时间
+            case R.id.ll_cancel:
+                dismiss();
+                break;
+            //确定
+            case R.id.ll_submit:
+                String hour = wv_hour.getSeletedItem().replace("点","");
+                String minute = wv_minute.getSeletedItem().replace("分","");
+                timePickerSubmitListener.doSubmit(wv_date.getSeletedItem()+" "+hour+":"+minute);
+                dismiss();
+                break;
+        }
 
     }
 

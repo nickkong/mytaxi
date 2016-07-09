@@ -104,7 +104,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     }
 
     /**
-     *地图初始化
+     * 初始化地图
      */
     private void initMap(){
 
@@ -199,9 +199,11 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            //进入消息中心
             case R.id.btn_message:
                 startActivity(new Intent(this, MessageActivity.class),false);
                 break;
+            //进入我的
             case R.id.btn_me:
                 startActivity(new Intent(this, MeActivity.class),false);
                 break;

@@ -9,7 +9,7 @@ import android.view.KeyEvent;
 import com.umeng.analytics.MobclickAgent;
 
 /**
- * 基类
+ * Activity基类
  * Created by NickKong on 16/7/7.
  */
 public abstract class BaseActivity extends FragmentActivity{
@@ -20,18 +20,29 @@ public abstract class BaseActivity extends FragmentActivity{
 
     }
 
+    /**
+     * 自定义跳转页面方法
+     * 主要是统一切换动画、增加是否关闭当前页面
+     */
     protected void startActivity(Intent intent, boolean flag) {
         startActivity(intent);
         activityAnimation();
         if (flag) finish();
     }
 
+    /**
+     * 重写带返回参数的跳转页面方法
+     * 主要是统一切换动画
+     */
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
         activityAnimation();
     }
 
+    /**
+     * 初始化控件
+     */
     protected abstract void initView();
 
     /**

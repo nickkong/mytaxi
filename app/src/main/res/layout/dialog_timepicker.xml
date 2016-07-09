@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <com.zhtaxi.haodi.widget.WheelView
-                android:id="@+id/main1"
+                android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:requiresFadingEdge="none"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <com.zhtaxi.haodi.widget.WheelView
-                android:id="@+id/main2"
+                android:id="@+id/hour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:requiresFadingEdge="none"
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <com.zhtaxi.haodi.widget.WheelView
-                android:id="@+id/main3"
+                android:id="@+id/minute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:requiresFadingEdge="none"
