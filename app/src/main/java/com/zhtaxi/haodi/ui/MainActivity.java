@@ -243,8 +243,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
             }
             mylocation = location;
             if(tab1!=null && tab2!=null){
-                tab1.address_start.setText(location.getLocationDescribe());
-                tab2.address_start.setText(location.getLocationDescribe());
+                if(tab1.address_start!=null && tab2.address_start!=null){
+                    tab1.address_start.setText(location.getLocationDescribe());
+                    tab2.address_start.setText(location.getLocationDescribe());
+                }
             }
 
             MyLocationData locData = new MyLocationData.Builder()
