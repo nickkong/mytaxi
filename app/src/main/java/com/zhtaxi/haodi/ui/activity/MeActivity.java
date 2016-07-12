@@ -3,7 +3,6 @@ package com.zhtaxi.haodi.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.zhtaxi.haodi.R;
 
@@ -29,8 +28,8 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
      */
     @Override
     public void initView() {
-        Button btn_back = (Button) findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(this);
+        View ll_back = findViewById(R.id.ll_back);
+        ll_back.setOnClickListener(this);
         View rl_topersonalinfo = findViewById(R.id.rl_topersonalinfo);
         rl_topersonalinfo.setOnClickListener(this);
         View rl_tosetting = findViewById(R.id.rl_tosetting);
@@ -41,7 +40,7 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             //返回
-            case R.id.btn_back:
+            case R.id.ll_back:
                 doFinish();
                 break;
             //跳转个人资料页面

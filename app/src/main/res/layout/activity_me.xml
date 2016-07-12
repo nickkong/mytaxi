@@ -11,16 +11,7 @@
         android:layout_height="@dimen/maintitle"
         android:background="@color/MAIN">
 
-        <Button
-            android:id="@id/btn_back"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:background="@color/TRANSPARENT"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/F7"
-            android:textColor="@color/white"
-            android:layout_marginLeft="@dimen/interval_E"
-            android:text="返回"/>
+        <include layout="@layout/backup"/>
 
     </RelativeLayout>
 
