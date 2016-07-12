@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.zhtaxi.haodi.R;
+
 /**
  * Fragment基类
  * Created by NickKong on 16/7/7.
@@ -40,6 +42,6 @@ public class BaseFragment extends Fragment{
      * 设置页面跳转动画
      */
     private void activityAnimation(){
-        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, android.R.anim.fade_out);
     }
 }

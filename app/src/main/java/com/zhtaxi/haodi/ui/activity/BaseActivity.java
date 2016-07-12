@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 
 import com.umeng.analytics.MobclickAgent;
+import com.zhtaxi.haodi.R;
 
 /**
  * Activity基类
@@ -26,7 +27,7 @@ public abstract class BaseActivity extends FragmentActivity{
      */
     protected void startActivity(Intent intent, boolean flag) {
         startActivity(intent);
-        activityAnimation();
+        startActivityAnimation();
         if (flag) finish();
     }
 
@@ -37,7 +38,7 @@ public abstract class BaseActivity extends FragmentActivity{
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
-        activityAnimation();
+        startActivityAnimation();
     }
 
     /**
@@ -50,7 +51,7 @@ public abstract class BaseActivity extends FragmentActivity{
      */
     protected void doFinish(){
         finish();
-        activityAnimation();
+        returnActivityAnimation();
     }
 
     /**
@@ -61,7 +62,7 @@ public abstract class BaseActivity extends FragmentActivity{
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             finish();
-            activityAnimation();
+            returnActivityAnimation();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -70,8 +71,15 @@ public abstract class BaseActivity extends FragmentActivity{
     /**
      * 设置页面跳转动画
      */
-    private void activityAnimation(){
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    private void startActivityAnimation(){
+        overridePendingTransition(R.anim.slide_in_right, android.R.anim.fade_out);
+    }
+
+    /**
+     * 设置页面返回跳转动画
+     */
+    private void returnActivityAnimation(){
+        overridePendingTransition(0, android.R.anim.slide_out_right);
     }
 
     /**
