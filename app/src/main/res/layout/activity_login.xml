@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/TEXT_BG">
+
+    <RelativeLayout
+        android:id="@id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:background="@color/TEXT_MAIN">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_login"
+            android:textColor="@color/white"
+            android:textSize="@dimen/F3"
+            android:layout_centerInParent="true"/>
+
+        <include layout="@layout/backup"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/interval_A">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/maintitle"
+            android:orientation="horizontal"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="手机号"
+                android:textSize="@dimen/F8"
+                android:textColor="@color/TEXT_MAIN"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/interval_A"
+                android:layout_marginRight="@dimen/interval_A"/>
+
+            <EditText
+                android:id="@id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:textSize="@dimen/F8"
+                android:textColor="@color/TEXT_MAIN"
+                android:inputType="phone"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/maintitle"
+            android:layout_marginTop="0.5dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@id/tv_certCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="验证码"
+                android:textSize="@dimen/F8"
+                android:textColor="@color/TEXT_MAIN"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/interval_A"
+                android:layout_marginRight="@dimen/interval_A"/>
+
+            <Button
+                android:id="@id/btn_getCertCode"
+                android:layout_width="70dp"
+                android:layout_height="35dp"
+                android:background="@drawable/border_radius"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/F8"
+                android:layout_marginLeft="@dimen/interval_A"
+                android:layout_marginRight="@dimen/interval_E"
+                android:text="获取"/>
+
+            <EditText
+                android:id="@id/et_certCode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:background="@color/white"
+                android:textSize="@dimen/F8"
+                android:textColor="@color/TEXT_MAIN"
+                android:layout_toRightOf="@id/tv_certCode"
+                android:layout_toLeftOf="@id/btn_getCertCode"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@id/btn_login"
+            android:layout_width="300dp"
+            android:layout_height="@dimen/maintitle"
+            android:layout_marginTop="@dimen/interval_AA"
+            android:background="@drawable/border_radius_main"
+            android:textColor="@color/white"
+            android:textSize="@dimen/F8"
+            android:layout_gravity="center"
+            android:text="登录"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/F11"
+            android:textColor="@color/TEXT_SUB"
+            android:layout_marginTop="@dimen/interval_C"
+            android:text="还没注册？试试使用短信验证码直接登录"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+</LinearLayout>

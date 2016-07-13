@@ -8,23 +8,27 @@ import android.os.Environment;
  */
 public class Constant {
 
-    public final static boolean DEVELOPER_MODE = false;
+    public final static boolean DEVELOPER_MODE = true;
+
+    public final static String SP_KEY = "USER";
 
     public final static String BASE_DIR = Environment.getExternalStorageDirectory().toString() + "/haodi/";
-
-    public final static String APP_URL = "";
 
     public final static int INIT_PAGENO = 1;
     public final static int INIT_PAGESIZE = 10;
 
     public final static int INTENT_RESULTCODE = 8888;
 
-    public static final int CONNECT_TIMEOUT = 10000;
+    public final static int CONNECT_TIMEOUT = 10000;
 
-    public static int HTTP_STATUS_CODE_SUCCESS = 200;
+    public final static int CERTCODE_TIME = 60;
 
-    public final static String RECODE_SUCCESS = "0000";
-    public final static String RECODE_FAILED = "0001";
+    public final static int HTTP_STATUS_CODE_SUCCESS = 200;
+
+    public final static int HTTPUTIL_FAILURECODE = 9999;
+
+    public final static String RECODE_SUCCESS = "1";
+    public final static String RECODE_FAILED = "0000";
     public final static String RECODE_FAILED_NODATA = "1001";
     public final static String RECODE_FAILED_PARAM_WRONG = "1002";
     public final static String RECODE_FAILED_APPKEY_WRONG = "1003";
@@ -39,11 +43,11 @@ public class Constant {
     public final static String RECODE_ERROR_SYSTEM = "9999";
     public final static String RECODE_ERROR_TIPS = "10000";
 
-    public static final int PULLDOWN_INITDATA = 1;
-    public static final int PULLDOWN_REFRESH = 2;
-    public static final int PULLDOWN_LOADMORE = 3;
+    public final static int PULLDOWN_INITDATA = 1;
+    public final static int PULLDOWN_REFRESH = 2;
+    public final static int PULLDOWN_LOADMORE = 3;
 
-    public static double latitude = 0;
-    public static double lontitude = 0;
+    public final static double latitude = 0;
+    public final static double lontitude = 0;
 
 }

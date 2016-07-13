@@ -3,8 +3,11 @@
     <string name="title_message">消息中心</string>
     <string name="title_personalinfo">个人资料</string>
     <string name="title_setting">设置</string>
+    <string name="title_login">登录</string>
 
     <string name="update_tips">发现最新版本，是否更新?</string>
+    <string name="matchphone_tips">请输入正确手机号</string>
+    <string name="certcode_tips">短信验证码不能为空</string>
 
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="release_to_refresh">释放立即刷新</string>
@@ -16,4 +19,6 @@
     <string name="load_succeed">加载成功</string>
     <string name="load_fail">加载失败</string>
     <string name="loading">请求数据中，请稍候&#8230;</string>
+
+    <string name="mobile_matches">(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9])\\d{8}</string>
 </resources>

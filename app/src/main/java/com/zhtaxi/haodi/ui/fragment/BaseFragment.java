@@ -1,11 +1,13 @@
 package com.zhtaxi.haodi.ui.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.zhtaxi.haodi.R;
+import com.zhtaxi.haodi.util.Constant;
 
 /**
  * Fragment基类
@@ -13,9 +15,14 @@ import com.zhtaxi.haodi.R;
  */
 public class BaseFragment extends Fragment{
 
+    public SharedPreferences.Editor editor_user;
+    public SharedPreferences sp_user;
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp_user = getActivity().getSharedPreferences(Constant.SP_KEY, Activity.MODE_PRIVATE);
+        editor_user = sp_user.edit();
     }
 
     /**

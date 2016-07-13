@@ -32,4 +32,9 @@
     <item type="id" name="rl_topersonalinfo"/>
     <item type="id" name="rl_tosetting"/>
     <item type="id" name="ll_back"/>
+    <item type="id" name="btn_login"/>
+    <item type="id" name="btn_getCertCode"/>
+    <item type="id" name="et_phone"/>
+    <item type="id" name="et_certCode"/>
+    <item type="id" name="tv_certCode"/>
 </resources>

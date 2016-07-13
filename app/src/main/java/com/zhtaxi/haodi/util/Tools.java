@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.TypedValue;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -824,5 +825,12 @@ public class Tools {
     public static int dp2px(Context context, int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 context.getResources().getDisplayMetrics());
+    }
+
+    /**
+     * 弹出提示
+     */
+    public static void showToast(Context context,String content){
+        Toast.makeText(context,content,Toast.LENGTH_SHORT).show();
     }
 }

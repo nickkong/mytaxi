@@ -2,6 +2,7 @@ package com.zhtaxi.haodi.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.zhtaxi.haodi.R;
+import com.zhtaxi.haodi.ui.activity.LoginActivity;
 import com.zhtaxi.haodi.ui.listener.OnYuecheBtnClickListener;
 
 /**
@@ -44,7 +46,14 @@ public class HuishouFragment extends BaseFragment implements View.OnClickListene
                 break;
             //挥手叫车
             case R.id.btn_huishou:
-                doVibrator();
+                //已登录
+                if (!"".equals(sp_user.getString("sessionid", ""))){
+                    doVibrator();
+                }
+                //未登录，跳转注册/登录页面
+                else {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
                 break;
         }
     }

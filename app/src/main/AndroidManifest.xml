@@ -71,6 +71,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activity.SettingActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"/>
 
         <!--友盟统计-->
         <meta-data android:value="577db8e467e58e8000002f53" android:name="UMENG_APPKEY"/>

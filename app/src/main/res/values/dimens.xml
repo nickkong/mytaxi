@@ -21,6 +21,7 @@
     <dimen name="F14">9sp</dimen>
     <dimen name="F15">8sp</dimen>
 
+    <dimen name="interval_AA">20dp</dimen>
     <dimen name="interval_A">14dp</dimen>
     <dimen name="interval_B">12dp</dimen>
     <dimen name="interval_C">10dp</dimen>
