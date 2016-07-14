@@ -344,7 +344,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
             } else {
                 MobclickAgent.onKillProcess(this);
                 finish();
-                System.exit(0);
             }
             return true;
         }
