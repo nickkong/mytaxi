@@ -13,6 +13,9 @@ import com.zhtaxi.haodi.util.HttpUtil;
 import com.zhtaxi.haodi.util.RequestAddress;
 import com.zhtaxi.haodi.widget.TipsDialog;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 设置，包含退出
  * Created by NickKong on 16/7/9.
@@ -63,8 +66,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      * 退出
      */
     private void logout() {
+        Map params = new HashMap();
+        params.put("haode_session_id", sp_user.getString("sessionId",""));
         HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_LOGOUT,
-                RequestAddress.logout,null);
+                RequestAddress.logout,params);
     }
 
     /**

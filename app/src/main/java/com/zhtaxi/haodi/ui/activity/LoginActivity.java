@@ -140,11 +140,29 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      * 获取验证码
      */
     private void getCertCode(){
+
+        showLoadingDialog("验证码已发送",2);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                disLoadingDialog();
+            }
+        }, 2000);
+
         //验证码输入框获得焦点
         et_certCode.requestFocus();
         //定时60秒
         time = Constant.CERTCODE_TIME;
         timer = new Timer(true);
+
+        task = new TimerTask() {
+            public void run() {
+                mHandler.sendEmptyMessage(CERTCODE_UI);
+            }
+        };
+        timer.schedule(task, 0, 1000);
+
         phone = et_phone.getText().toString().trim();
         Map params = new HashMap();
         params.put("mobilePhone", phone);
@@ -174,7 +192,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         if (Constant.RECODE_SUCCESS.equals(result)) {
 
                             String userId = jsonObject.getString("userId");
+                            String sessionId = jsonObject.getString("sessionId");
                             editor_user.putString("userId",userId);
+                            editor_user.putString("sessionId",sessionId);
                             editor_user.commit();
 
                             //保存手机号码，方便下次登录时可以回显
@@ -199,22 +219,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         String result = jsonObject.getString("result");
                         if (Constant.RECODE_SUCCESS.equals(result)) {
 
-                            showLoadingDialog("验证码已发送",2);
-
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    disLoadingDialog();
-                                }
-                            }, 2000);
-
-
-                            task = new TimerTask() {
-                                public void run() {
-                                    mHandler.sendEmptyMessage(CERTCODE_UI);
-                                }
-                            };
-                            timer.schedule(task, 0, 1000);
                         }
                         else if (Constant.RECODE_FAILED.equals(result)) {
                             String errMsgs = jsonObject.getString("errMsgs");

@@ -61,12 +61,28 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
         SimpleDateFormat sdf_hour = new SimpleDateFormat("HH");//设置日期格式
         hour = sdf_hour.format(new Date());
         int int_hour = Integer.parseInt(hour);
-        SimpleDateFormat sdf_minute = new SimpleDateFormat("MM");//设置日期格式
+        SimpleDateFormat sdf_minute = new SimpleDateFormat("mm");//设置日期格式
         minute = sdf_minute.format(new Date());
         int int_minute = Integer.parseInt(minute);
-        for(int i=0;i<24-int_hour;i++){
-            hour_list.add(int_hour+i+"点");
+        Log.d(TAG,"int_minute=="+int_minute);
+
+        if(int_minute<=40){
+            for(int i=0;i<24-int_hour;i++){
+                hour_list.add(int_hour+i+"点");
+            }
+        }else {
+            for(int i=0;i<23-int_hour;i++){
+                hour_list.add(int_hour+1+i+"点");
+            }
         }
+
+        int future_minute = int_minute+20;
+        if(future_minute<60 && future_minute>50){
+            for(int i=0;i<6;i++){
+                minute_list.add(i+"0分");
+            }
+        }
+
         this.timePickerSubmitListener = timePickerSubmitListener;
 
     }
