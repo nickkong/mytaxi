@@ -3,12 +3,15 @@ package com.zhtaxi.haodi.ui.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
 
 import com.zhtaxi.haodi.R;
+import com.zhtaxi.haodi.ui.listener.OnDialogClickListener;
 import com.zhtaxi.haodi.util.Constant;
 import com.zhtaxi.haodi.util.HttpUtil;
 import com.zhtaxi.haodi.util.RequestAddress;
+import com.zhtaxi.haodi.widget.TipsDialog;
 
 /**
  * 设置，包含退出
@@ -51,7 +54,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 break;
             //退出
             case R.id.rl_logout:
-                logout();
+                showTipsDialog("你确定要退出登录？",2);
                 break;
         }
     }
@@ -63,6 +66,31 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_LOGOUT,
                 RequestAddress.logout,null);
     }
+
+    /**
+     * 弹出提示对话框
+     */
+    private void showTipsDialog(String content, int dialogType) {
+        TipsDialog tipsDialog = new TipsDialog(this, content, dialogClickListener, dialogType);
+        tipsDialog.getWindow().setGravity(Gravity.CENTER);
+        tipsDialog.setCanceledOnTouchOutside(true);
+        tipsDialog.show();
+    }
+
+    /**
+     * 按钮事件监听
+     */
+    private OnDialogClickListener dialogClickListener = new OnDialogClickListener() {
+        @Override
+        public void doConfirm() {
+            logout();
+        }
+
+        @Override
+        public void doConfirm(int type) {
+
+        }
+    };
 
 
     Handler mHandler = new Handler() {

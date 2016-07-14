@@ -38,4 +38,6 @@
     <item type="id" name="et_phone"/>
     <item type="id" name="et_certCode"/>
     <item type="id" name="tv_certCode"/>
+    <item type="id" name="ll_home"/>
+    <item type="id" name="ll_company"/>
 </resources>

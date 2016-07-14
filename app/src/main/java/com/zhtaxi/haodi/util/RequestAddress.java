@@ -7,6 +7,7 @@ package com.zhtaxi.haodi.util;
 public class RequestAddress {
 
     public final static String APP_URL = "http://120.76.29.5:8080/taxi_web/app/";
+//    public final static String APP_URL = "http://119.120.234.148:8080/taxi_web/app/";
 
     public final static String login = "login";
     public final static String getCertCode = "getCertCode";

@@ -57,6 +57,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@id/ll_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/border_noradius_left"
@@ -71,6 +72,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@id/ll_company"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/border_noradius_right"

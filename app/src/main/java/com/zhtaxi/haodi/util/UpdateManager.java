@@ -181,7 +181,7 @@ public class UpdateManager {
 //        tipsDialog.show();
 //    }
 //
-//    private BtnConfirmListener dialogBtnListener = new BtnConfirmListener() {
+//    private OnDialogClickListener dialogBtnListener = new OnDialogClickListener() {
 //        @Override
 //        public void doConfirm() {
 //            showDownloadDialog("软件版本更新",0);

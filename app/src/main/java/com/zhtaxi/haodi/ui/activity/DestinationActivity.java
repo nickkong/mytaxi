@@ -1,5 +1,6 @@
 package com.zhtaxi.haodi.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +29,10 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
     public void initView() {
         Button btn_back = (Button) findViewById(R.id.btn_back);
         btn_back.setOnClickListener(this);
+        View ll_home = findViewById(R.id.ll_home);
+        ll_home.setOnClickListener(this);
+        View ll_company = findViewById(R.id.ll_company);
+        ll_company.setOnClickListener(this);
     }
 
     @Override
@@ -37,6 +42,22 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
             //返回
             case R.id.btn_back:
                 doFinish();
+                break;
+            case R.id.ll_home:
+                //未登录，跳转注册/登录页面
+                if(needLogin()){
+                    startActivityByFade(new Intent(this, LoginActivity.class));
+                }else {
+
+                }
+                break;
+            case R.id.ll_company:
+                //未登录，跳转注册/登录页面
+                if(needLogin()){
+                    startActivityByFade(new Intent(this, LoginActivity.class));
+                }else {
+
+                }
                 break;
         }
 

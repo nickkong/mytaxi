@@ -3,6 +3,7 @@
     <dimen name="maintitle">45dp</dimen>
     <dimen name="headheight">90dp</dimen>
     <dimen name="inputbar">44dp</dimen>
+    <dimen name="buttonheight">35dp</dimen>
 
     <dimen name="F0">26sp</dimen>
     <dimen name="F1">24sp</dimen>
@@ -27,7 +28,10 @@
     <dimen name="interval_C">10dp</dimen>
     <dimen name="interval_D">8dp</dimen>
     <dimen name="interval_E">6dp</dimen>
+    <dimen name="interval_F">4dp</dimen>
+    <dimen name="interval_G">2dp</dimen>
 
     <dimen name="corner_radius">3dp</dimen>
+    <dimen name="dialog_corner_radius">5dp</dimen>
 
 </resources>

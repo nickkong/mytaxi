@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/interval_AA"
+    android:background="@drawable/tipsdialog_bg"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="提示"
+        android:layout_gravity="center"
+        android:textSize="@dimen/F7"
+        android:textColor="@color/TEXT_MAIN"
+        android:paddingBottom="2dp"
+        android:paddingTop="@dimen/interval_E" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/interval_AA"
+        android:layout_marginRight="@dimen/interval_AA"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:padding="@dimen/interval_A"
+        android:textColor="@color/TEXT_MAIN"
+        android:textSize="@dimen/F8"/>
+
+    <LinearLayout
+        android:id="@+id/ll_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialog_left"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/buttonheight"
+            android:layout_weight="1"
+            android:background="@drawable/tipsdialog_left"
+            android:layout_marginRight="@dimen/interval_D"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="取消"
+            android:textColor="@color/TEXT_SUB"
+            android:textSize="@dimen/F7" />
+
+        <Button
+            android:id="@+id/dialog_right"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/buttonheight"
+            android:background="@drawable/tipsdialog_right"
+            android:layout_marginLeft="@dimen/interval_D"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_weight="1"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="@dimen/F7" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/maintitle"
+        android:background="@drawable/tipsdialog_right"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="@dimen/F2"
+        android:visibility="gone"/>
+
+</LinearLayout>
