@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.Gravity;
 import android.view.KeyEvent;
 
 import com.umeng.analytics.MobclickAgent;
 import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.util.Constant;
+import com.zhtaxi.haodi.widget.LoadingDialog;
 
 /**
  * Activity基类
@@ -19,6 +21,7 @@ public abstract class BaseActivity extends FragmentActivity{
 
     public SharedPreferences.Editor editor_user;
     public SharedPreferences sp_user;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,10 +125,31 @@ public abstract class BaseActivity extends FragmentActivity{
      * 根据userId判断是否需要登录
      */
     protected boolean needLogin(){
-        if("".equals(sp_user.getString("userId", ""))){
-            return true; //未登录
-        }else {
-            return false; //已登录
+
+        return "".equals(sp_user.getString("userId", ""));
+    }
+
+    /**
+     * 显示进度提示框
+     */
+    public void showLoadingDialog(String content, int type){
+
+        if(loadingDialog == null){
+            loadingDialog = new LoadingDialog(this,content,type);
+            loadingDialog.getWindow().setGravity(Gravity.CENTER);
+            loadingDialog.setCancelable(false);
+        }
+        loadingDialog.show();
+    }
+
+    /**
+     * 隐藏进度提示框
+     */
+    public void disLoadingDialog(){
+
+        if(loadingDialog!=null){
+            loadingDialog.dismiss();
+            loadingDialog = null;
         }
     }
 

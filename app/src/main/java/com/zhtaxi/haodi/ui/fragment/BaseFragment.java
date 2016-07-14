@@ -71,10 +71,7 @@ public class BaseFragment extends Fragment{
      * 根据userId判断是否需要登录
      */
     protected boolean needLogin(){
-        if("".equals(sp_user.getString("userId", ""))){
-            return true; //未登录
-        }else {
-            return false; //已登录
-        }
+
+        return "".equals(sp_user.getString("userId", ""));
     }
 }

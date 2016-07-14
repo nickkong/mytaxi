@@ -105,10 +105,22 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 //退出
                 case SUCCESSCODE_LOGOUT:
 
-                    editor_user.clear();
-                    editor_user.commit();
-                    setResult(RESULT_OK);
-                    doFinishByFade();
+                    showLoadingDialog("退出登录成功",2);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            disLoadingDialog();
+
+                            editor_user.clear();
+                            editor_user.commit();
+                            setResult(RESULT_OK);
+
+                            doFinishByFade();
+                        }
+                    }, 2000);
+
 //                    try {
 //                        JSONObject jsonObject = new JSONObject(message);
 //                        String result = jsonObject.getString("result");

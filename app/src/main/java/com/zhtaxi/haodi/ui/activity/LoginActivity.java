@@ -117,12 +117,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      * 登录
      */
     private void login(){
-        phone = et_phone.getText().toString().trim();
-        Map params = new HashMap();
-        params.put("mobilePhone", phone);
-        params.put("certCode", et_certCode.getText().toString().trim());
-        HttpUtil.doGet(TAG,this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_LOGIN,
-                RequestAddress.login,params);
+
+        showLoadingDialog("登录中...",1);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                phone = et_phone.getText().toString().trim();
+                Map params = new HashMap();
+                params.put("mobilePhone", phone);
+                params.put("certCode", et_certCode.getText().toString().trim());
+                HttpUtil.doGet(TAG,LoginActivity.this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_LOGIN,
+                        RequestAddress.login,params);
+
+            }
+        }, 2000);
+
     }
 
     /**
@@ -153,6 +164,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     break;
                 //登录
                 case SUCCESSCODE_LOGIN:
+
+                    disLoadingDialog();
+
                     try {
                         JSONObject jsonObject = new JSONObject(message);
                         String result = jsonObject.getString("result");
@@ -184,6 +198,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         JSONObject jsonObject = new JSONObject(message);
                         String result = jsonObject.getString("result");
                         if (Constant.RECODE_SUCCESS.equals(result)) {
+
+                            showLoadingDialog("验证码已发送",2);
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    disLoadingDialog();
+                                }
+                            }, 2000);
+
+
                             task = new TimerTask() {
                                 public void run() {
                                     mHandler.sendEmptyMessage(CERTCODE_UI);

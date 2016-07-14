@@ -40,4 +40,5 @@
     <item type="id" name="tv_certCode"/>
     <item type="id" name="ll_home"/>
     <item type="id" name="ll_company"/>
+    <item type="id" name="tv_content"/>
 </resources>
