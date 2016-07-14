@@ -187,6 +187,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@id/rl_logout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/maintitle"
         android:layout_marginTop="@dimen/interval_A"

@@ -46,13 +46,13 @@ public class HuishouFragment extends BaseFragment implements View.OnClickListene
                 break;
             //挥手叫车
             case R.id.btn_huishou:
-                //已登录
-                if (!"".equals(sp_user.getString("sessionid", ""))){
-                    doVibrator();
-                }
                 //未登录，跳转注册/登录页面
+                if (needLogin()){
+                    startActivityByFade(new Intent(getActivity(), LoginActivity.class));
+                }
+                //已登录
                 else {
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    doVibrator();
                 }
                 break;
         }

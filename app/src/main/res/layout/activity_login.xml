@@ -77,7 +77,7 @@
                 android:id="@id/btn_getCertCode"
                 android:layout_width="70dp"
                 android:layout_height="35dp"
-                android:background="@drawable/border_radius"
+                android:background="@drawable/border_radius_mainsub_enable"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/white"

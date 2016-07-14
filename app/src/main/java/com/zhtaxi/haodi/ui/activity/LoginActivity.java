@@ -1,8 +1,11 @@
 package com.zhtaxi.haodi.ui.activity;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +36,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private static final int SUCCESSCODE_CERTCODE = 2;
     private static final int CERTCODE_UI = 3;
 
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+
     private Button btn_getCertCode;
+
+    private String phone;
 
     private int time = Constant.CERTCODE_TIME;
     private Timer timer;
@@ -55,6 +63,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      */
     @Override
     protected void initView() {
+        sp = getSharedPreferences(getString(R.string.app_name), Activity.MODE_PRIVATE);
+        editor = sp.edit();
 
         View ll_back = findViewById(R.id.ll_back);
         ll_back.setOnClickListener(this);
@@ -65,6 +75,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_certCode = (EditText) findViewById(R.id.et_certCode);
 
+        //回显登录过的手机号码
+        String sp_phone = sp.getString(Constant.SP_PHONE_KEY, "");
+        if (!"".equals(sp_phone.trim())) {
+            et_phone.setText(sp_phone);
+            et_certCode.requestFocus();
+        }
     }
 
     @Override
@@ -73,7 +89,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         switch (v.getId()){
             //返回
             case R.id.ll_back:
-                doFinish();
+                doFinishByFade();
                 break;
             //登录
             case R.id.btn_login:
@@ -95,16 +111,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 }
                 break;
         }
-
     }
 
     /**
      * 登录
      */
     private void login(){
+        phone = et_phone.getText().toString().trim();
         Map params = new HashMap();
-        params.put("mobilePhone", et_phone.getText().toString());
-        params.put("certCode", et_certCode.getText().toString());
+        params.put("mobilePhone", phone);
+        params.put("certCode", et_certCode.getText().toString().trim());
         HttpUtil.doGet(TAG,this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_LOGIN,
                 RequestAddress.login,params);
     }
@@ -114,14 +130,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      */
     private void getCertCode(){
         //验证码输入框获得焦点
-        et_certCode.setFocusable(true);
-        et_certCode.setFocusableInTouchMode(true);
         et_certCode.requestFocus();
         //定时60秒
         time = Constant.CERTCODE_TIME;
         timer = new Timer(true);
+        phone = et_phone.getText().toString().trim();
         Map params = new HashMap();
-        params.put("mobilePhone", et_phone.getText().toString());
+        params.put("mobilePhone", phone);
         HttpUtil.doGet(TAG,this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_CERTCODE,
                 RequestAddress.getCertCode,params);
     }
@@ -141,12 +156,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     try {
                         JSONObject jsonObject = new JSONObject(message);
                         String result = jsonObject.getString("result");
+                        //注册/登录成功，返回上一页
                         if (Constant.RECODE_SUCCESS.equals(result)) {
-//                            JSONArray datalist = jsonObject.getJSONArray("datalist");
-//                            Gson gson = new Gson();
-//                            Type listType = new TypeToken<List<GoodsPropertysData>>() {
-//                            }.getType();
-//                            Constant.propertys = gson.fromJson(datalist.toString(), listType);
+
+                            String userId = jsonObject.getString("userId");
+                            editor_user.putString("userId",userId);
+                            editor_user.commit();
+
+                            //保存手机号码，方便下次登录时可以回显
+                            editor.putString(Constant.SP_PHONE_KEY, phone);
+                            editor.commit();
+
+                            doFinishByFade();
                         }
                         else if (Constant.RECODE_FAILED.equals(result)) {
                             String errMsgs = jsonObject.getString("errMsgs");
@@ -178,11 +199,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         e.printStackTrace();
                     }
                     break;
+                //更新倒数
                 case CERTCODE_UI:
                     time--;
                     btn_getCertCode.setEnabled(false);
-//                        btn_getCertCode.setTextColor(getResources().getColor(R.color.TEXT_SUB));
-//                        btn_getCertCode.setBackgroundResource(R.drawable.button_bg_border_main_pressed);
+                    btn_getCertCode.setBackgroundResource(R.drawable.border_radius_mainsub_disable);
                     btn_getCertCode.setText(time+"秒");
                     if (time == 0) {
                         task.cancel();
@@ -191,11 +212,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         timer = null;
                         btn_getCertCode.setText("获取");
                         btn_getCertCode.setEnabled(true);
-//                            btn_getCertCode.setTextColor(getResources().getColor(R.color.MAIN));
-//                            btn_getCertCode.setBackgroundResource(R.drawable.button_bg_border_main_normal);
+                        btn_getCertCode.setBackgroundResource(R.drawable.border_radius_mainsub_enable);
                     }
                     break;
             }
         }
     };
+
+    /**
+     * 带返回动画的返回键关闭页面
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            doFinishByFade();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

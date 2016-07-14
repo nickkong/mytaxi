@@ -1,13 +1,15 @@
 package com.zhtaxi.haodi.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 
 import com.umeng.analytics.MobclickAgent;
 import com.zhtaxi.haodi.R;
+import com.zhtaxi.haodi.util.Constant;
 
 /**
  * Activity基类
@@ -15,10 +17,14 @@ import com.zhtaxi.haodi.R;
  */
 public abstract class BaseActivity extends FragmentActivity{
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public SharedPreferences.Editor editor_user;
+    public SharedPreferences sp_user;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sp_user = getSharedPreferences(Constant.SP_KEY, Activity.MODE_PRIVATE);
+        editor_user = sp_user.edit();
     }
 
     /**
@@ -26,9 +32,18 @@ public abstract class BaseActivity extends FragmentActivity{
      * 主要是统一切换动画、增加是否关闭当前页面
      */
     protected void startActivity(Intent intent, boolean flag) {
-        startActivity(intent);
+        super.startActivity(intent);
         startActivityAnimation();
         if (flag) finish();
+    }
+
+    /**
+     * 重写跳转页面方法
+     * 淡出淡入动画
+     */
+    public void startActivityByFade(Intent intent){
+        super.startActivity(intent);
+        startActivityAnimationByFade();
     }
 
     /**
@@ -55,14 +70,21 @@ public abstract class BaseActivity extends FragmentActivity{
     }
 
     /**
+     * 带返回动画的关闭页面,淡入淡出动画
+     */
+    protected void doFinishByFade(){
+        finish();
+        returnActivityAnimationByFade();
+    }
+
+    /**
      * 带返回动画的返回键关闭页面
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
-            finish();
-            returnActivityAnimation();
+            doFinish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -76,10 +98,35 @@ public abstract class BaseActivity extends FragmentActivity{
     }
 
     /**
+     * 设置页面跳转动画，淡出淡入
+     */
+    private void startActivityAnimationByFade(){
+        overridePendingTransition(R.anim.abc_fade_in, android.R.anim.fade_out);
+    }
+
+    /**
      * 设置页面返回跳转动画
      */
     private void returnActivityAnimation(){
         overridePendingTransition(0, android.R.anim.slide_out_right);
+    }
+
+    /**
+     * 设置页面返回跳转动画，淡入淡出
+     */
+    private void returnActivityAnimationByFade(){
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    /**
+     * 根据userId判断是否需要登录
+     */
+    protected boolean needLogin(){
+        if("".equals(sp_user.getString("userId", ""))){
+            return true; //未登录
+        }else {
+            return false; //已登录
+        }
     }
 
     /**

@@ -3,8 +3,10 @@ package com.zhtaxi.haodi.ui.fragment;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.ui.activity.DestinationActivity;
+import com.zhtaxi.haodi.ui.activity.LoginActivity;
 import com.zhtaxi.haodi.ui.listener.OnHuishouBtnClickListener;
 import com.zhtaxi.haodi.ui.listener.OnTimePickerSubmitListener;
 import com.zhtaxi.haodi.widget.CustomTimePicker;
@@ -44,6 +47,8 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
         tv_yueche_future = (TextView) view.findViewById(R.id.tv_yueche_future);
         Button btn_change_huishou = (Button) view.findViewById(R.id.btn_change_huishou);
         btn_change_huishou.setOnClickListener(this);
+        Button btn_yueche = (Button) view.findViewById(R.id.btn_yueche);
+        btn_yueche.setOnClickListener(this);
         address_start = (TextView) view.findViewById(R.id.address_start);
         tv_yueche_time = (TextView) view.findViewById(R.id.tv_yueche_time);
         ll_time = view.findViewById(R.id.ll_time);
@@ -140,6 +145,17 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
             case R.id.ll_change_end:
                 startActivity(new Intent(getActivity(), DestinationActivity.class));
                 break;
+            //呼叫出租车
+            case R.id.btn_yueche:
+                //未登录，跳转注册/登录页面
+                if (needLogin()){
+                    startActivityByFade(new Intent(getActivity(), LoginActivity.class));
+                }
+                //已登录
+                else {
+                    doVibrator();
+                }
+                break;
         }
     }
 
@@ -164,6 +180,15 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
             tv_yueche_time.setText(content);
         }
     };
+
+    /**
+     * 开启振动
+     */
+    private void doVibrator(){
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        long [] pattern = {0,20,0,0};
+        vibrator.vibrate(pattern,-1);
+    }
 
     /**
      * 绑定监听，告知父activity切换成挥手叫车状态

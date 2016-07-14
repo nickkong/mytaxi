@@ -29,10 +29,18 @@ public class BaseFragment extends Fragment{
      * 重写跳转页面方法
      * 主要是统一切换动画
      */
-    @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
-        activityAnimation();
+        startActivityAnimation();
+    }
+
+    /**
+     * 重写跳转页面方法
+     * 淡出淡入动画
+     */
+    public void startActivityByFade(Intent intent){
+        super.startActivity(intent);
+        startActivityAnimationByFade();
     }
 
     /**
@@ -42,13 +50,31 @@ public class BaseFragment extends Fragment{
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
-        activityAnimation();
+        startActivityAnimation();
     }
 
     /**
      * 设置页面跳转动画
      */
-    private void activityAnimation(){
+    private void startActivityAnimation(){
         getActivity().overridePendingTransition(R.anim.slide_in_right, android.R.anim.fade_out);
+    }
+
+    /**
+     * 设置页面跳转动画，淡出淡入
+     */
+    private void startActivityAnimationByFade(){
+        getActivity().overridePendingTransition(R.anim.abc_fade_in, android.R.anim.fade_out);
+    }
+
+    /**
+     * 根据userId判断是否需要登录
+     */
+    protected boolean needLogin(){
+        if("".equals(sp_user.getString("userId", ""))){
+            return true; //未登录
+        }else {
+            return false; //已登录
+        }
     }
 }

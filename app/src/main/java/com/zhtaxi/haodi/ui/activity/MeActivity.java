@@ -14,6 +14,8 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
 
     private String TAG = getClass().getSimpleName();
 
+    private static final int REQUESTCODE_SETTING = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,9 +51,17 @@ public class MeActivity extends BaseActivity implements View.OnClickListener{
                 break;
             //跳转设置页面
             case R.id.rl_tosetting:
-                startActivity(new Intent(this,SettingActivity.class),false);
+                startActivityForResult(new Intent(this,SettingActivity.class),REQUESTCODE_SETTING);
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //退出后关闭“我的”页面
+        if(requestCode == REQUESTCODE_SETTING && resultCode == RESULT_OK){
+            doFinishByFade();
+        }
+    }
 }

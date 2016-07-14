@@ -35,6 +35,7 @@ import com.zhtaxi.haodi.HaodiApplication;
 import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.service.LocationService;
 import com.zhtaxi.haodi.ui.activity.BaseActivity;
+import com.zhtaxi.haodi.ui.activity.LoginActivity;
 import com.zhtaxi.haodi.ui.activity.MeActivity;
 import com.zhtaxi.haodi.ui.activity.MessageActivity;
 import com.zhtaxi.haodi.ui.fragment.HuishouFragment;
@@ -198,15 +199,21 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            //进入消息中心
-            case R.id.btn_message:
-                startActivity(new Intent(this, MessageActivity.class),false);
-                break;
-            //进入我的
-            case R.id.btn_me:
-                startActivity(new Intent(this, MeActivity.class),false);
-                break;
+
+        //未登录，跳转注册/登录页面
+        if(needLogin()){
+            startActivityByFade(new Intent(this, LoginActivity.class));
+        }else {
+            switch (v.getId()){
+                //进入消息中心
+                case R.id.btn_message:
+                    startActivity(new Intent(this, MessageActivity.class),false);
+                    break;
+                //进入我的
+                case R.id.btn_me:
+                    startActivity(new Intent(this, MeActivity.class),false);
+                    break;
+            }
         }
     }
 

@@ -12,6 +12,8 @@ public class Constant {
 
     public final static String SP_KEY = "USER";
 
+    public final static String SP_PHONE_KEY = "PHONE";
+
     public final static String BASE_DIR = Environment.getExternalStorageDirectory().toString() + "/haodi/";
 
     public final static int INIT_PAGENO = 1;
