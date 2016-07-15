@@ -37,7 +37,7 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
                                             "17点","18点","19点","20点","21点","22点","23点"};
     private static final String[] MINUTE = new String[]{"00分","10分","20分","30分","40分","50分"};
 
-    private List<String> hour_list,minute_list;
+    private List<String> date_list,hour_list,minute_list;
 
     private Context context;
 
@@ -55,6 +55,7 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
         super(context,R.style.dialog_full);
 
         this.context = context;
+        date_list = new ArrayList<>();
         hour_list = new ArrayList<>();
         minute_list = new ArrayList<>();
 
@@ -64,22 +65,83 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
         SimpleDateFormat sdf_minute = new SimpleDateFormat("mm");//设置日期格式
         minute = sdf_minute.format(new Date());
         int int_minute = Integer.parseInt(minute);
-        Log.d(TAG,"int_minute=="+int_minute);
 
-        if(int_minute<=40){
-            for(int i=0;i<24-int_hour;i++){
-                hour_list.add(int_hour+i+"点");
+        //23:31后 预约时间只能是明天0:00后，需特殊处理
+        if(int_hour==23 && int_minute>30){
+            date_list.clear();
+            date_list.add("明天");
+            hour_list.clear();
+            for(int i=0;i<24;i++){
+                hour_list.add(i+"点");
             }
-        }else {
-            for(int i=0;i<23-int_hour;i++){
-                hour_list.add(int_hour+1+i+"点");
+            if(int_minute<=40 && int_minute>30){
+                minute_list.clear();
+                for(int i=0;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
+            }else if(int_minute<=50 && int_minute>40){
+                minute_list.clear();
+                for(int i=1;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
+            }else if(int_minute>50){
+                minute_list.clear();
+                for(int i=2;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
             }
         }
+        //23:30以及之前
+        else {
+            date_list.clear();
+            date_list.add("今天");
+            date_list.add("明天");
+            //根据手机当前时间构造可预约的小时
+            if(int_minute<=30){
+                hour_list.clear();
+                for(int i=0;i<24-int_hour;i++){
+                    hour_list.add(int_hour+i+"点");
+                }
+            }else {
+                hour_list.clear();
+                for(int i=0;i<23-int_hour;i++){
+                    hour_list.add(int_hour+1+i+"点");
+                }
+            }
 
-        int future_minute = int_minute+20;
-        if(future_minute<60 && future_minute>50){
-            for(int i=0;i<6;i++){
-                minute_list.add(i+"0分");
+            //只能预约当前时间的20分钟后
+            int future_minute = int_minute+20;
+            //根据手机当前时间构造可预约的分钟
+            if(future_minute<=60 && future_minute>50){
+                minute_list.clear();
+                for(int i=0;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
+            }else if(future_minute<=50 && future_minute>40){
+                minute_list.clear();
+                for(int i=5;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
+            }else if(future_minute<=40 && future_minute>30){
+                minute_list.clear();
+                for(int i=4;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
+            }else if(future_minute<=30 && future_minute>20){
+                minute_list.clear();
+                for(int i=3;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
+            }else if(future_minute<=70 && future_minute>60){
+                minute_list.clear();
+                for(int i=1;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
+            }else if((future_minute<80 && future_minute>70) || future_minute==20){
+                minute_list.clear();
+                for(int i=2;i<6;i++){
+                    minute_list.add(i+"0分");
+                }
             }
         }
 
@@ -105,16 +167,21 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
         wv_minute = (WheelView) dialog.findViewById(R.id.minute);
 
         wv_date.setOffset(1);
-        wv_date.setItems(Arrays.asList(DATE));
+        wv_date.setItems(date_list);
         wv_date.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, String item) {
-                Log.d(TAG, "selectedIndex: " + selectedIndex + ", item: " + item);
-                if(selectedIndex==1){
-                    wv_hour.setItems(hour_list);
-                }
-                if(selectedIndex==2){
-                    wv_hour.setItems(Arrays.asList(HOUR));
+                if(date_list.size()!=1){
+                    //今天
+                    if(selectedIndex==1){
+                        wv_hour.setItems(hour_list);
+                        wv_minute.setItems(minute_list);
+                    }
+                    //明天
+                    if(selectedIndex==2){
+                        wv_hour.setItems(Arrays.asList(HOUR));
+                        wv_minute.setItems(Arrays.asList(MINUTE));
+                    }
                 }
             }
         });
@@ -124,10 +191,18 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
             @Override
             public void onSelected(int selectedIndex, String item) {
                 Log.d(TAG, "selectedIndex: " + selectedIndex + ", item: " + item);
+
+                if(hour_list.size()!=1){
+                    if(selectedIndex==1){
+                        wv_minute.setItems(minute_list);
+                    }else {
+                        wv_minute.setItems(Arrays.asList(MINUTE));
+                    }
+                }
             }
         });
         wv_minute.setOffset(1);
-        wv_minute.setItems(Arrays.asList(MINUTE));
+        wv_minute.setItems(minute_list);
         wv_minute.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
             @Override
             public void onSelected(int selectedIndex, String item) {
@@ -155,7 +230,6 @@ public class CustomTimePicker extends Dialog implements View.OnClickListener{
                 dismiss();
                 break;
         }
-
     }
 
 }
