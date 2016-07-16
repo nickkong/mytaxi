@@ -49,6 +49,8 @@ public class Constant {
     public final static int PULLDOWN_REFRESH = 2;
     public final static int PULLDOWN_LOADMORE = 3;
 
+    public final static String LOCATION_ERROR = "4.9E-324";
+
     public final static double latitude = 0;
     public final static double lontitude = 0;
 

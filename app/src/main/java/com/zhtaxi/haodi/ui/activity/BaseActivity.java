@@ -13,6 +13,9 @@ import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.util.Constant;
 import com.zhtaxi.haodi.widget.LoadingDialog;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Activity基类
  * Created by NickKong on 16/7/7.
@@ -44,7 +47,7 @@ public abstract class BaseActivity extends FragmentActivity{
      * 重写跳转页面方法
      * 淡出淡入动画
      */
-    public void startActivityByFade(Intent intent){
+    protected void startActivityByFade(Intent intent){
         super.startActivity(intent);
         startActivityAnimationByFade();
     }
@@ -130,9 +133,21 @@ public abstract class BaseActivity extends FragmentActivity{
     }
 
     /**
+     * 封装调用登录后接口的固定参数
+     */
+    protected Map<String, Object> generateRequestMap() {
+
+        Map<String, Object> map = new HashMap();
+        map.put("userId", sp_user.getString("userId",""));
+        map.put("haode_session_id", sp_user.getString("sessionId",""));
+
+        return map;
+    }
+
+    /**
      * 显示进度提示框
      */
-    public void showLoadingDialog(String content, int type){
+    protected void showLoadingDialog(String content, int type){
 
         if(loadingDialog == null){
             loadingDialog = new LoadingDialog(this,content,type);
@@ -145,7 +160,7 @@ public abstract class BaseActivity extends FragmentActivity{
     /**
      * 隐藏进度提示框
      */
-    public void disLoadingDialog(){
+    protected void disLoadingDialog(){
 
         if(loadingDialog!=null){
             loadingDialog.dismiss();

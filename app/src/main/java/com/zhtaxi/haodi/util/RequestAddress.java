@@ -12,5 +12,6 @@ public class RequestAddress {
     public final static String login = "login";
     public final static String getCertCode = "getCertCode";
     public final static String logout = "logout";
+    public final static String uploadGps = "uploadGps";
 
 }

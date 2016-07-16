@@ -2,6 +2,7 @@ package com.zhtaxi.haodi.ui.activity;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,8 +37,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private static final int SUCCESSCODE_CERTCODE = 2;
     private static final int CERTCODE_UI = 3;
 
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
+    private Editor editor;
 
     private Button btn_getCertCode;
 
@@ -63,7 +63,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      */
     @Override
     protected void initView() {
-        sp = getSharedPreferences(getString(R.string.app_name), Activity.MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences(getString(R.string.app_name), Activity.MODE_PRIVATE);
         editor = sp.edit();
 
         View ll_back = findViewById(R.id.ll_back);

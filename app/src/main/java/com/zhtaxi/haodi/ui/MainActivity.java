@@ -3,8 +3,10 @@ package com.zhtaxi.haodi.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,12 +44,16 @@ import com.zhtaxi.haodi.ui.fragment.HuishouFragment;
 import com.zhtaxi.haodi.ui.fragment.YuecheFragment;
 import com.zhtaxi.haodi.ui.listener.OnHuishouBtnClickListener;
 import com.zhtaxi.haodi.ui.listener.OnYuecheBtnClickListener;
+import com.zhtaxi.haodi.util.Constant;
+import com.zhtaxi.haodi.util.HttpUtil;
+import com.zhtaxi.haodi.util.RequestAddress;
 import com.zhtaxi.haodi.util.Tools;
 import com.zhtaxi.haodi.util.UpdateManager;
 import com.zhtaxi.haodi.widget.CustomViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -62,6 +68,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private static final int APPEAR_DELAY = 2000;
     private static final int DISAPPEAR_DELAY = 2500;
 
+    private static final int SUCCESSCODE_UPLOADGPS = 1;
+
     private long exitTime = 0;
     private LocationService locationService;
     private CustomViewPager vp_control;
@@ -73,6 +81,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private BaiduMap mBaiduMap;
     private BDLocation mylocation;
     private boolean isFirstLoc = true;
+
+    private StringBuffer sb = new StringBuffer();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +99,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         initWelcomePage();
 
         MobclickAgent.enableEncrypt(true);
+
     }
 
     /**
@@ -217,6 +228,37 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         }
     }
 
+    private void doUploadGps(){
+
+        sb = new StringBuffer();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                uploadGps();
+            }
+        }, 5000);
+    }
+
+    /**
+     * 上传gps
+     * userId,licensePlate(车牌号码)，isTrip(是否行程中)，orderNo(订单号)，mapType(地图类型)，locations
+     * isTrip为0时不用传orderNo
+     * locations=纬度1,经度1,时间1long型;纬度2,经度2,时间2long型;纬度3,经度3,时间3long型;纬度4,经度4,时间4long型;
+     */
+    private void uploadGps(){
+        Log.d(TAG,"sb.toString()==="+sb.toString());
+        Map params = generateRequestMap();
+        params.put("licensePlate", "粤YKK265");
+        params.put("isTrip", "0");
+//        params.put("orderNo", "0");
+        params.put("mapType", "0");
+        params.put("locations", sb.toString());
+        HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_UPLOADGPS,
+                RequestAddress.uploadGps,params);
+
+    }
+
     @Override
     public void doYueche() {
         vp_control.setCurrentItem(1);
@@ -254,6 +296,12 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     tab1.address_start.setText(location.getLocationDescribe());
                     tab2.address_start.setText(location.getLocationDescribe());
                 }
+            }
+
+            //经度和纬度都不是返回4.9E-324才记录
+            if(!Constant.LOCATION_ERROR.equals(location.getLatitude())&&
+                    !Constant.LOCATION_ERROR.equals(location.getLongitude())){
+                sb.append(location.getLatitude()+","+location.getLongitude()+","+System.currentTimeMillis()+";");
             }
 
             MyLocationData locData = new MyLocationData.Builder()
@@ -330,6 +378,38 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         mBaiduMap.addOverlay(makeroption5);
         mBaiduMap.addOverlay(makeroption6);
     }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            String message = (String) msg.obj;
+            switch (msg.what) {
+                case Constant.HTTPUTIL_FAILURECODE:
+
+                    break;
+                //上传gps
+                case SUCCESSCODE_UPLOADGPS:
+
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(message);
+//                        String result = jsonObject.getString("result");
+//                        //注册/登录成功，返回上一页
+//                        if (Constant.RECODE_SUCCESS.equals(result)) {
+//
+//                        }
+//                        else if (Constant.RECODE_FAILED.equals(result)) {
+//                            String errMsgs = jsonObject.getString("errMsgs");
+//                            Tools.showToast(LoginActivity.this,errMsgs);
+//
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+                    break;
+            }
+        }
+    };
 
     /**
      * 按两次手机返回键退出程序

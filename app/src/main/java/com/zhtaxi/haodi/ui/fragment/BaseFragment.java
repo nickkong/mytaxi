@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.util.Constant;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Fragment基类
  * Created by NickKong on 16/7/7.
@@ -38,7 +41,7 @@ public class BaseFragment extends Fragment{
      * 重写跳转页面方法
      * 淡出淡入动画
      */
-    public void startActivityByFade(Intent intent){
+    protected void startActivityByFade(Intent intent){
         super.startActivity(intent);
         startActivityAnimationByFade();
     }
@@ -73,5 +76,17 @@ public class BaseFragment extends Fragment{
     protected boolean needLogin(){
 
         return "".equals(sp_user.getString("userId", ""));
+    }
+
+    /**
+     * 封装调用登录后接口的固定参数
+     */
+    protected Map<String, Object> generateRequestMap() {
+
+        Map<String, Object> map = new HashMap();
+        map.put("userId", sp_user.getString("userId",""));
+        map.put("haode_session_id", sp_user.getString("sessionId",""));
+
+        return map;
     }
 }
