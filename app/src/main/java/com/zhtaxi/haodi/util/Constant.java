@@ -40,7 +40,7 @@ public class Constant {
     public final static String RECODE_FAILED_USER_LOGIN = "2001";
     public final static String RECODE_FAILED_USER_NOTEXIST = "2002";
     public final static String RECODE_FAILED_PASSWORD_WRONG = "2003";
-    public final static String RECODE_FAILED_SESSION_WRONG = "2004";
+    public final static String RECODE_FAILED_SESSION_WRONG = "0001";
 
     public final static String RECODE_ERROR_SYSTEM = "9999";
     public final static String RECODE_ERROR_TIPS = "10000";

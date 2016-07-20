@@ -65,12 +65,12 @@
     <Button
         android:id="@+id/btn_confirm"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/maintitle"
+        android:layout_height="@dimen/buttonheight"
         android:background="@drawable/tipsdialog_right"
         style="?android:attr/borderlessButtonStyle"
         android:text="确定"
         android:textColor="@color/white"
-        android:textSize="@dimen/F2"
+        android:textSize="@dimen/F7"
         android:visibility="gone"/>
 
 </LinearLayout>

@@ -13,5 +13,6 @@ public class RequestAddress {
     public final static String getCertCode = "getCertCode";
     public final static String logout = "logout";
     public final static String uploadGps = "uploadGps";
+    public final static String queryNearByUsers = "queryNearByUsers";
 
 }

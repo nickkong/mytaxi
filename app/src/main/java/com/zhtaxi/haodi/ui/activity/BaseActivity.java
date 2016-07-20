@@ -10,8 +10,10 @@ import android.view.KeyEvent;
 
 import com.umeng.analytics.MobclickAgent;
 import com.zhtaxi.haodi.R;
+import com.zhtaxi.haodi.ui.listener.OnDialogClickListener;
 import com.zhtaxi.haodi.util.Constant;
 import com.zhtaxi.haodi.widget.LoadingDialog;
+import com.zhtaxi.haodi.widget.TipsDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -138,8 +140,9 @@ public abstract class BaseActivity extends FragmentActivity{
     protected Map<String, Object> generateRequestMap() {
 
         Map<String, Object> map = new HashMap();
-        map.put("userId", sp_user.getString("userId",""));
+//        map.put("userId", sp_user.getString("userId",""));
         map.put("haode_session_id", sp_user.getString("sessionId",""));
+//        map.put("haode_session_id", "C851CFC5998DFB77B1602D45FCEC1D6F");
 
         return map;
     }
@@ -166,6 +169,24 @@ public abstract class BaseActivity extends FragmentActivity{
             loadingDialog.dismiss();
             loadingDialog = null;
         }
+    }
+
+    /**
+     * 弹出提示对话框
+     */
+    protected void showTipsDialog(String content, int dialogType, OnDialogClickListener dialogClickListener) {
+        TipsDialog tipsDialog = new TipsDialog(this, content, dialogClickListener, dialogType);
+        tipsDialog.getWindow().setGravity(Gravity.CENTER);
+        tipsDialog.setCanceledOnTouchOutside(true);
+        tipsDialog.show();
+    }
+
+    /**
+     * 登录信息失效，重新登录
+     */
+    protected void reLogin(){
+        editor_user.clear();
+        editor_user.commit();
     }
 
     /**

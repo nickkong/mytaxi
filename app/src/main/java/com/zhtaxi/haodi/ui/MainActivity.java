@@ -42,6 +42,7 @@ import com.zhtaxi.haodi.ui.activity.MeActivity;
 import com.zhtaxi.haodi.ui.activity.MessageActivity;
 import com.zhtaxi.haodi.ui.fragment.HuishouFragment;
 import com.zhtaxi.haodi.ui.fragment.YuecheFragment;
+import com.zhtaxi.haodi.ui.listener.OnDialogClickListener;
 import com.zhtaxi.haodi.ui.listener.OnHuishouBtnClickListener;
 import com.zhtaxi.haodi.ui.listener.OnYuecheBtnClickListener;
 import com.zhtaxi.haodi.util.Constant;
@@ -51,10 +52,16 @@ import com.zhtaxi.haodi.util.Tools;
 import com.zhtaxi.haodi.util.UpdateManager;
 import com.zhtaxi.haodi.widget.CustomViewPager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 主界面，默认显示挥手叫车
@@ -67,8 +74,11 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
     private static final int APPEAR_DELAY = 2000;
     private static final int DISAPPEAR_DELAY = 2500;
+    private static final int UPLOADGPS_PERIOD = 5000;
 
     private static final int SUCCESSCODE_UPLOADGPS = 1;
+    private static final int SUCCESSCODE_QUERYNEARBYUSERS = 2;
+    private static final int HANDLER_UPLOADGPS = 3;
 
     private long exitTime = 0;
     private LocationService locationService;
@@ -83,6 +93,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private boolean isFirstLoc = true;
 
     private StringBuffer sb = new StringBuffer();
+    private Timer timer;
+    private TimerTask task;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,6 +231,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                 //进入消息中心
                 case R.id.btn_message:
                     startActivity(new Intent(this, MessageActivity.class),false);
+//                    getNearByUsers();
                     break;
                 //进入我的
                 case R.id.btn_me:
@@ -228,16 +241,36 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         }
     }
 
+    /**
+     * 定时执行上传gps
+     */
     private void doUploadGps(){
 
-        sb = new StringBuffer();
+        timer = new Timer(true);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
+        task = new TimerTask() {
+
             public void run() {
-                uploadGps();
+                mHandler.sendEmptyMessage(HANDLER_UPLOADGPS);
             }
-        }, 5000);
+        };
+
+        timer.schedule(task, UPLOADGPS_PERIOD, UPLOADGPS_PERIOD);
+
+    }
+
+
+    private void getNearByUsers(){
+
+//        Map params = generateRequestMap();
+        Map<String, Object> params = new HashMap();
+//        params.put("userId", sp_user.getString("userId",""));
+        params.put("lat", "23.658819");
+        params.put("lng", "116.607008");
+//        params.put("distanceLessThan", "5");
+        HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_QUERYNEARBYUSERS,
+                RequestAddress.queryNearByUsers,params);
+
     }
 
     /**
@@ -247,16 +280,15 @@ public class MainActivity extends BaseActivity implements OnClickListener,
      * locations=纬度1,经度1,时间1long型;纬度2,经度2,时间2long型;纬度3,经度3,时间3long型;纬度4,经度4,时间4long型;
      */
     private void uploadGps(){
-        Log.d(TAG,"sb.toString()==="+sb.toString());
+//        Log.d(TAG,"sb.toString()==="+sb.toString());
         Map params = generateRequestMap();
-        params.put("licensePlate", "粤YKK265");
+        params.put("licensePlate", "粤Y99999");
         params.put("isTrip", "0");
 //        params.put("orderNo", "0");
         params.put("mapType", "0");
         params.put("locations", sb.toString());
         HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_UPLOADGPS,
                 RequestAddress.uploadGps,params);
-
     }
 
     @Override
@@ -390,24 +422,58 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     break;
                 //上传gps
                 case SUCCESSCODE_UPLOADGPS:
+                    try {
+                        JSONObject jsonObject = new JSONObject(message);
+                        String result = jsonObject.getString("result");
+                        //注册/登录成功，返回上一页
+                        if (Constant.RECODE_SUCCESS.equals(result)) {
 
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(message);
-//                        String result = jsonObject.getString("result");
-//                        //注册/登录成功，返回上一页
-//                        if (Constant.RECODE_SUCCESS.equals(result)) {
-//
-//                        }
-//                        else if (Constant.RECODE_FAILED.equals(result)) {
-//                            String errMsgs = jsonObject.getString("errMsgs");
-//                            Tools.showToast(LoginActivity.this,errMsgs);
-//
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+                        }
+                        else if (Constant.RECODE_FAILED.equals(result)) {
+                            String errMsgs = jsonObject.getString("errMsgs");
+
+                        }
+                        else if (Constant.RECODE_FAILED_SESSION_WRONG.equals(result)) {
+                            reLogin();
+                            showTipsDialog("登录信息失效，请重新登录",1,dialogClickListener);
+                            //取消自动上传位置信息
+                            task.cancel();
+                            task = null;
+                            timer.cancel();
+                            timer = null;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                //获取附近车辆
+                case SUCCESSCODE_QUERYNEARBYUSERS:
+
+                    break;
+                //定时上传GPS
+                case HANDLER_UPLOADGPS:
+                    uploadGps();
+                    sb = new StringBuffer();
                     break;
             }
+        }
+    };
+
+    /**
+     * 按钮事件监听
+     */
+    private OnDialogClickListener dialogClickListener = new OnDialogClickListener() {
+        @Override
+        public void doConfirm() {
+            //未登录，跳转注册/登录页面
+            if(needLogin()){
+                startActivityByFade(new Intent(MainActivity.this, LoginActivity.class));
+            }
+        }
+
+        @Override
+        public void doConfirm(int type) {
+
         }
     };
 
@@ -432,34 +498,57 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
     @Override
     protected void onStart() {
-        locationService = ((HaodiApplication)getApplication()).locationService;
-        locationService.registerListener(myListener);
-        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
-        locationService.start();
+        Log.d(TAG,"===onStart===");
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        locationService.unregisterListener(myListener);
-        locationService.stop();
+        Log.d(TAG,"===onStop===");
         super.onStop();
     }
 
     @Override
     public void onPause() {
+        Log.d(TAG,"===onPause===");
         mMapView.onPause();
+
+        locationService.unregisterListener(myListener);
+        locationService.stop();
+
+        //取消自动上传位置信息
+        if(task!=null){
+            task.cancel();
+            task = null;
+        }
+        if(timer!=null){
+            timer.cancel();
+            timer = null;
+        }
+
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        Log.d(TAG,"===onResume===");
         mMapView.onResume();
+
+        locationService = ((HaodiApplication)getApplication()).locationService;
+        locationService.registerListener(myListener);
+        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+        locationService.start();
+
+        if(!needLogin()){
+            sb = new StringBuffer();
+            doUploadGps();
+        }
         super.onResume();
     }
 
     @Override
     public void onDestroy() {
+        Log.d(TAG,"===onDestroy===");
         // 关闭定位图层
         mBaiduMap.setMyLocationEnabled(false);
         mMapView.onDestroy();

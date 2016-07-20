@@ -3,7 +3,6 @@ package com.zhtaxi.haodi.ui.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
 import android.view.View;
 
 import com.zhtaxi.haodi.R;
@@ -11,9 +10,10 @@ import com.zhtaxi.haodi.ui.listener.OnDialogClickListener;
 import com.zhtaxi.haodi.util.Constant;
 import com.zhtaxi.haodi.util.HttpUtil;
 import com.zhtaxi.haodi.util.RequestAddress;
-import com.zhtaxi.haodi.widget.TipsDialog;
 
-import java.util.HashMap;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Map;
 
 /**
@@ -57,7 +57,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 break;
             //退出
             case R.id.rl_logout:
-                showTipsDialog("你确定要退出登录？",2);
+                showTipsDialog("你确定要退出登录？",2,dialogClickListener);
                 break;
         }
     }
@@ -66,20 +66,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      * 退出
      */
     private void logout() {
-        Map params = new HashMap();
-        params.put("haode_session_id", sp_user.getString("sessionId",""));
+        Map params = generateRequestMap();
         HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_LOGOUT,
                 RequestAddress.logout,params);
-    }
-
-    /**
-     * 弹出提示对话框
-     */
-    private void showTipsDialog(String content, int dialogType) {
-        TipsDialog tipsDialog = new TipsDialog(this, content, dialogClickListener, dialogType);
-        tipsDialog.getWindow().setGravity(Gravity.CENTER);
-        tipsDialog.setCanceledOnTouchOutside(true);
-        tipsDialog.show();
     }
 
     /**
@@ -109,41 +98,38 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     break;
                 //退出
                 case SUCCESSCODE_LOGOUT:
+                    try {
+                        JSONObject jsonObject = new JSONObject(message);
+                        String result = jsonObject.getString("result");
 
-                    showLoadingDialog("退出登录成功",2);
+                        if (Constant.RECODE_SUCCESS.equals(result)) {
+                            showLoadingDialog("退出登录成功",2);
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
 
-                            disLoadingDialog();
+                                    disLoadingDialog();
 
-                            editor_user.clear();
-                            editor_user.commit();
-                            setResult(RESULT_OK);
+                                    editor_user.clear();
+                                    editor_user.commit();
+                                    setResult(RESULT_OK);
 
-                            doFinishByFade();
+                                    doFinishByFade();
+                                }
+                            }, 2000);
                         }
-                    }, 2000);
+                        else if (Constant.RECODE_FAILED.equals(result)) {
+                            String errMsgs = jsonObject.getString("errMsgs");
 
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(message);
-//                        String result = jsonObject.getString("result");
-//                        //注册/登录成功，返回上一页
-//                        if (Constant.RECODE_SUCCESS.equals(result)) {
-//                            String userId = jsonObject.getString("userId");
-//                            editor_user.putString("userId",userId);
-//                            editor_user.commit();
-//                            doFinishByFade();
-//                        }
-//                        else if (Constant.RECODE_FAILED.equals(result)) {
-//                            String errMsgs = jsonObject.getString("errMsgs");
-//                            Tools.showToast(LoginActivity.this,errMsgs);
-//
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+                        }
+                        else if (Constant.RECODE_FAILED_SESSION_WRONG.equals(result)) {
+                            reLogin();
+                            showTipsDialog("登录信息失效，请重新登录",1,dialogClickListener);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
