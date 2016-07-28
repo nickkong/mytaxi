@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.nickkong.commonlibrary.ui.activity.BaseActivity;
 import com.zhtaxi.haodi.R;
 
 /**

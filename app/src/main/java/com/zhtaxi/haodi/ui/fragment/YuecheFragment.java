@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.nickkong.commonlibrary.ui.fragment.BaseFragment;
 import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.ui.activity.DestinationActivity;
 import com.zhtaxi.haodi.ui.activity.LoginActivity;

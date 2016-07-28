@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.nickkong.commonlibrary.util.Tools;
 import com.zhtaxi.haodi.R;
 
 import java.io.File;

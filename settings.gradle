@@ -1,1 +1,4 @@
 include ':app'
+include ':CommonLibrary'
+project (':CommonLibrary').projectDir = new File('../CommonLibrary/')
+include ':CommonLibrary:base'

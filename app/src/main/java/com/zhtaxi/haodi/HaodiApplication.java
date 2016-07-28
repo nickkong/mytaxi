@@ -3,7 +3,9 @@ package com.zhtaxi.haodi;
 import android.app.Application;
 
 import com.baidu.mapapi.SDKInitializer;
-import com.zhtaxi.haodi.service.LocationService;
+import com.nickkong.commonlibrary.service.LocationService;
+
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * 全局Application
@@ -21,6 +23,9 @@ public class HaodiApplication extends Application {
         locationService = new LocationService(this);
         //百度地图，在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
         SDKInitializer.initialize(this);
+        //初始化极光推送
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
 
 
     }

@@ -32,29 +32,30 @@ import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.nickkong.commonlibrary.service.LocationService;
+import com.nickkong.commonlibrary.ui.activity.BaseActivity;
+import com.nickkong.commonlibrary.ui.listener.OnDialogClickListener;
+import com.nickkong.commonlibrary.util.HttpUtil;
+import com.nickkong.commonlibrary.util.Tools;
 import com.umeng.analytics.MobclickAgent;
 import com.zhtaxi.haodi.HaodiApplication;
 import com.zhtaxi.haodi.R;
-import com.zhtaxi.haodi.service.LocationService;
-import com.zhtaxi.haodi.ui.activity.BaseActivity;
 import com.zhtaxi.haodi.ui.activity.LoginActivity;
 import com.zhtaxi.haodi.ui.activity.MeActivity;
 import com.zhtaxi.haodi.ui.activity.MessageActivity;
 import com.zhtaxi.haodi.ui.fragment.HuishouFragment;
 import com.zhtaxi.haodi.ui.fragment.YuecheFragment;
-import com.zhtaxi.haodi.ui.listener.OnDialogClickListener;
 import com.zhtaxi.haodi.ui.listener.OnHuishouBtnClickListener;
 import com.zhtaxi.haodi.ui.listener.OnYuecheBtnClickListener;
 import com.zhtaxi.haodi.util.Constant;
-import com.zhtaxi.haodi.util.HttpUtil;
 import com.zhtaxi.haodi.util.RequestAddress;
-import com.zhtaxi.haodi.util.Tools;
 import com.zhtaxi.haodi.util.UpdateManager;
 import com.zhtaxi.haodi.widget.CustomViewPager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -236,6 +237,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                 //进入我的
                 case R.id.btn_me:
                     startActivity(new Intent(this, MeActivity.class),false);
+//                    getPlace();
                     break;
             }
         }
@@ -259,6 +261,18 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
     }
 
+    private void getPlace(){
+
+            Map<String, Object> params = new HashMap();
+            params.put("query", URLEncoder.encode("天安门"));
+            params.put("region", "131");
+            params.put("output", "json");
+            params.put("ak", "8wMQn0vRDF7GGrQvI1HXsLov0eWUoYFR");
+            HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_QUERYNEARBYUSERS,
+                    RequestAddress.suggestion,params);
+
+        //http://api.map.baidu.com/place/v2/suggestion?query=天安门&region=131&output=json&ak={您的密钥}
+    }
 
     private void getNearByUsers(){
 

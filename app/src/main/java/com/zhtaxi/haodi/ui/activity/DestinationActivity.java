@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.nickkong.commonlibrary.ui.activity.BaseActivity;
 import com.zhtaxi.haodi.R;
 
 /**

@@ -5,10 +5,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
+import com.nickkong.commonlibrary.ui.activity.BaseActivity;
+import com.nickkong.commonlibrary.ui.listener.OnDialogClickListener;
+import com.nickkong.commonlibrary.util.HttpUtil;
 import com.zhtaxi.haodi.R;
-import com.zhtaxi.haodi.ui.listener.OnDialogClickListener;
 import com.zhtaxi.haodi.util.Constant;
-import com.zhtaxi.haodi.util.HttpUtil;
 import com.zhtaxi.haodi.util.RequestAddress;
 
 import org.json.JSONException;

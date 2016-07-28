@@ -3,13 +3,14 @@ package com.zhtaxi.haodi.ui.activity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.nickkong.commonlibrary.ui.activity.BaseActivity;
 import com.zhtaxi.haodi.R;
 
 /**
  * 消息中心
  * Created by NickKong on 16/7/2.
  */
-public class MessageActivity extends BaseActivity{
+public class MessageActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
