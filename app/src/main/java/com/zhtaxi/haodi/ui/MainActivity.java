@@ -55,7 +55,6 @@ import com.zhtaxi.haodi.widget.CustomViewPager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,7 +144,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
                 LocationMode.NORMAL, true, null));
         //佛山 23.031033,113.131019
-        LatLng ll = new LatLng(22.275715,113.534735);
+        //珠海 22.256915,113.562447
+        LatLng ll = new LatLng(22.256915,113.562447);
         MapStatus.Builder builder = new MapStatus.Builder();
         builder.target(ll).zoom(15.0f);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
@@ -259,19 +259,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
         timer.schedule(task, UPLOADGPS_PERIOD, UPLOADGPS_PERIOD);
 
-    }
-
-    private void getPlace(){
-
-            Map<String, Object> params = new HashMap();
-            params.put("query", URLEncoder.encode("天安门"));
-            params.put("region", "131");
-            params.put("output", "json");
-            params.put("ak", "8wMQn0vRDF7GGrQvI1HXsLov0eWUoYFR");
-            HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_QUERYNEARBYUSERS,
-                    RequestAddress.suggestion,params);
-
-        //http://api.map.baidu.com/place/v2/suggestion?query=天安门&region=131&output=json&ak={您的密钥}
     }
 
     private void getNearByUsers(){
