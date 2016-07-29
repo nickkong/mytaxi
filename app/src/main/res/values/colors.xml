@@ -18,7 +18,7 @@
     <color name="TEXT_HINT">#cccccc</color>
     <color name="TITLE_SUB">#f8f8f8</color>
     <color name="HIGHLIGHT">#ff4141</color>
-    <color name="LIST_DIVIDER">#c7c7cc</color>
+    <color name="LIST_DIVIDER">#eeeeee</color>
     <color name="TEXT_BG">#eeeeee</color>
     <color name="TEXT_BG_SUB">#fafafa</color>
     <color name="CLASSIFY_BG">#e3e3e3</color>

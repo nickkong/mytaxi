@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.nickkong.commonlibrary.ui.activity.BaseActivity;
 import com.nickkong.commonlibrary.util.HttpUtil;
 import com.nickkong.commonlibrary.widget.pulltoRefreshAndLoad.PullToRefreshLayout;
+import com.nickkong.commonlibrary.widget.pulltoRefreshAndLoad.PullableListView;
 import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.adapter.PoiListAdapter;
 import com.zhtaxi.haodi.domain.PoiData;
@@ -42,10 +43,11 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
 
     private static final int SUCCESSCODE_GETPLACE = 1;
 
-    private ListView listView;
+    private PullableListView listView;
     private PoiListAdapter adapter;
     private PullToRefreshLayout ptrl;
     private List<PoiData> arrays;
+    private View ll_commonaddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,10 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
         View ll_company = findViewById(R.id.ll_company);
         ll_company.setOnClickListener(this);
         ptrl = ((PullToRefreshLayout) findViewById(R.id.refresh_view));
-//        ptrl.setOnRefreshListener(new MyListener());
-        listView = (ListView) findViewById(R.id.content_view);
+        listView = (PullableListView) findViewById(R.id.content_view);
+        listView.setCanPullDown(false);
+        listView.setCanPullUp(false);
+        ll_commonaddress = findViewById(R.id.ll_commonaddress);
         EditText et_addresskeyword = (EditText) findViewById(R.id.et_addresskeyword);
         et_addresskeyword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -79,7 +83,11 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG,"s.toString()=="+s.toString());
+                if(s.toString().length()==0){
+                    ll_commonaddress.setVisibility(View.VISIBLE);
+                }else {
+                    ll_commonaddress.setVisibility(View.GONE);
+                }
                 getPlace(s.toString());
             }
 

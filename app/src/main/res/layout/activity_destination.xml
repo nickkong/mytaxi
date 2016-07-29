@@ -42,6 +42,7 @@
             android:layout_toRightOf="@id/area"
             android:background="@drawable/border_normal"
             android:layout_margin="@dimen/interval_E"
+            android:singleLine="true"
             android:hint="您要去哪儿"
             android:textColor="@color/TEXT_HINT"
             android:textColorHint="@color/TEXT_SUB"
@@ -53,6 +54,7 @@
     <include layout="@layout/line"/>
 
     <LinearLayout
+        android:id="@+id/ll_commonaddress"
         android:layout_width="match_parent"
         android:layout_height="@dimen/maintitle"
         android:orientation="horizontal">
@@ -92,7 +94,8 @@
     <com.nickkong.commonlibrary.widget.pulltoRefreshAndLoad.PullToRefreshLayout
         android:id="@+id/refresh_view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        >
 
         <include layout="@layout/refresh_head" />
 
@@ -100,10 +103,11 @@
             android:id="@+id/content_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@color/TEXT_BG"
+            android:background="@color/white"
             android:divider="@color/LIST_DIVIDER"
-            android:dividerHeight="0dp"
-            android:listSelector="@color/TRANSPARENT">
+            android:dividerHeight="0.5dp"
+            android:listSelector="@color/LIST_DIVIDER"
+            android:paddingLeft="@dimen/interval_B">
 
         </com.nickkong.commonlibrary.widget.pulltoRefreshAndLoad.PullableListView>
         <include layout="@layout/load_more" />

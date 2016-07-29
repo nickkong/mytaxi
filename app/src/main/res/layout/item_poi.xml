@@ -3,21 +3,25 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/interval_C"
+    android:paddingRight="@dimen/interval_C"
+    android:paddingTop="@dimen/interval_D"
+    android:paddingBottom="@dimen/interval_D"
     android:background="@color/white">
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:textColor="@color/TEXT_MAIN"
-        android:textSize="@dimen/F7"
-        android:text="君悦龙庭"/>
+        android:textSize="@dimen/F8"/>
     <TextView
         android:id="@+id/tv_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="@color/TEXT_SUB"
-        android:textSize="@dimen/F10"
-        android:text="罗村大道南12号"/>
+        android:textSize="@dimen/F11"/>
 </LinearLayout>
