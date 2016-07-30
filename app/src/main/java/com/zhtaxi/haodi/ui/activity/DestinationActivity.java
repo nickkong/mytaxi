@@ -6,11 +6,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +47,9 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
     private PoiListAdapter adapter;
     private PullToRefreshLayout ptrl;
     private List<PoiData> arrays;
+    private List<PoiData> hotpoi_arrays;
     private View ll_commonaddress;
+    private View headview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
      */
     @Override
     public void initView() {
+        hotpoi_arrays = new ArrayList<>();
+        initDefaultPoiData();
         Button btn_back = (Button) findViewById(R.id.btn_back);
         btn_back.setOnClickListener(this);
         View ll_home = findViewById(R.id.ll_home);
@@ -73,7 +77,15 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
         listView = (PullableListView) findViewById(R.id.content_view);
         listView.setCanPullDown(false);
         listView.setCanPullUp(false);
+
+        getDefaultPoi();
+
         ll_commonaddress = findViewById(R.id.ll_commonaddress);
+
+        LayoutInflater inflaterhead = getLayoutInflater();
+        headview = inflaterhead.inflate(
+                R.layout.tips_nosearchresult, null);
+
         EditText et_addresskeyword = (EditText) findViewById(R.id.et_addresskeyword);
         et_addresskeyword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -84,11 +96,12 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.toString().length()==0){
+                    getDefaultPoi();
                     ll_commonaddress.setVisibility(View.VISIBLE);
                 }else {
+                    getPlace(s.toString());
                     ll_commonaddress.setVisibility(View.GONE);
                 }
-                getPlace(s.toString());
             }
 
             @Override
@@ -135,7 +148,6 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
         HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_GETPLACE,
                 RequestAddress.search,params);
 
-        //http://api.map.baidu.com/place/v2/suggestion?query=天安门&region=131&output=json&ak={您的密钥}
     }
 
     Handler mHandler = new Handler() {
@@ -157,14 +169,24 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
                             JSONArray results = jsonObject.getJSONArray("results");
                             Gson gson = new Gson();
                             Type listType = new TypeToken<List<PoiData>>() {}.getType();
-                            Log.d(TAG,"results.toString()==="+results.toString());
                             arrays = gson.fromJson(results.toString(), listType);
+
+                            if (arrays != null && arrays.size() > 0) {
+                                listView.removeHeaderView(headview);
+                                listView.setDividerHeight(2);
+                            }else {
+                                listView.removeHeaderView(headview);
+                                listView.addHeaderView(headview);
+                                listView.setDividerHeight(0);
+                            }
+
                             adapter = new PoiListAdapter(DestinationActivity.this, arrays);
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         }
+                        //
                         else {
-
+                            getDefaultPoi();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -173,4 +195,39 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
             }
         }
     };
+
+    String[] names = {"九洲港码头","夏湾市场","摩尔广场","九洲港口岸","珠海拱北口岸","扬名广场","北京理工大学珠海学院"
+            ,"珠海机场","北京师范大学珠海分校","华发商都","香洲总站","唐家市场","中海富华里","拱北口岸"};
+    String[] addresses = {"香洲区情侣南路","香洲区夏湾路226号附近","拱北","香洲区情侣南路","香洲区拱北侨光路3号"
+            ,"香洲区凤凰南路1088","香洲区金凤路6号","珠海机场","北京师范大学珠海分校","香洲区珠海大道8号华发商都2楼C2021馆"
+            ,"993路","香洲区唐中路","广东省珠海九洲大道与白石路交汇处","拱北口岸"};
+
+    private void initDefaultPoiData(){
+
+        for(int i=0;i<names.length;i++){
+            PoiData data = new PoiData();
+            data.setName(names[i]);
+            data.setAddress(addresses[i]);
+            hotpoi_arrays.add(data);
+        }
+    }
+
+
+    private void getDefaultPoi(){
+        arrays = hotpoi_arrays;
+
+        if (arrays != null && arrays.size() > 0) {
+            listView.removeHeaderView(headview);
+            listView.setDividerHeight(2);
+        }else {
+            listView.removeHeaderView(headview);
+            listView.addHeaderView(headview);
+            listView.setDividerHeight(0);
+        }
+
+        adapter = new PoiListAdapter(DestinationActivity.this, arrays);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
 }
