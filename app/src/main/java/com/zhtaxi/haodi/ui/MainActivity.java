@@ -261,13 +261,13 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
     }
 
+    /**
+     * 获取附近车辆和人位置信息
+     */
     private void getNearByUsers(){
-
-//        Map params = generateRequestMap();
         Map<String, Object> params = new HashMap();
-//        params.put("userId", sp_user.getString("userId",""));
-        params.put("lat", "23.658819");
-        params.put("lng", "116.607008");
+        params.put("lat", mylocation.getLatitude());
+        params.put("lng", mylocation.getLongitude());
 //        params.put("distanceLessThan", "5");
         HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_QUERYNEARBYUSERS,
                 RequestAddress.queryNearByUsers,params);
