@@ -91,6 +91,31 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_searching"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/interval_C"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleSmall"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="正在搜索"
+            android:textColor="@color/TEXT_SUB"
+            android:paddingLeft="@dimen/interval_F"
+            android:textSize="@dimen/F8"/>
+    </LinearLayout>
+
     <com.nickkong.commonlibrary.widget.pulltoRefreshAndLoad.PullToRefreshLayout
         android:id="@+id/refresh_view"
         android:layout_width="fill_parent"

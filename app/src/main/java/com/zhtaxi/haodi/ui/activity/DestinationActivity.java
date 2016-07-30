@@ -6,8 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -15,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nickkong.commonlibrary.ui.activity.BaseActivity;
 import com.nickkong.commonlibrary.util.HttpUtil;
-import com.nickkong.commonlibrary.widget.pulltoRefreshAndLoad.PullToRefreshLayout;
 import com.nickkong.commonlibrary.widget.pulltoRefreshAndLoad.PullableListView;
 import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.adapter.PoiListAdapter;
@@ -37,7 +36,7 @@ import java.util.Map;
  * 您要去哪儿，目的地搜索
  * Created by NickKong on 16/7/6.
  */
-public class DestinationActivity extends BaseActivity implements View.OnClickListener{
+public class DestinationActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener{
 
     private String TAG = getClass().getSimpleName();
 
@@ -45,11 +44,11 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
 
     private PullableListView listView;
     private PoiListAdapter adapter;
-    private PullToRefreshLayout ptrl;
     private List<PoiData> arrays;
     private List<PoiData> hotpoi_arrays;
     private View ll_commonaddress;
     private View headview;
+    private View ll_searching;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,28 +64,36 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
      */
     @Override
     public void initView() {
+
+        //初始化默认poi
         hotpoi_arrays = new ArrayList<>();
         initDefaultPoiData();
+
         Button btn_back = (Button) findViewById(R.id.btn_back);
         btn_back.setOnClickListener(this);
         View ll_home = findViewById(R.id.ll_home);
         ll_home.setOnClickListener(this);
         View ll_company = findViewById(R.id.ll_company);
         ll_company.setOnClickListener(this);
-        ptrl = ((PullToRefreshLayout) findViewById(R.id.refresh_view));
+        ll_searching = findViewById(R.id.ll_searching);
+
+        //初始化列表控件
         listView = (PullableListView) findViewById(R.id.content_view);
         listView.setCanPullDown(false);
         listView.setCanPullUp(false);
+        listView.setOnItemClickListener(this);
 
+        //首次进入获取默认的poi地址
         getDefaultPoi();
 
         ll_commonaddress = findViewById(R.id.ll_commonaddress);
 
-        LayoutInflater inflaterhead = getLayoutInflater();
-        headview = inflaterhead.inflate(
+        headview = getLayoutInflater().inflate(
                 R.layout.tips_nosearchresult, null);
 
         EditText et_addresskeyword = (EditText) findViewById(R.id.et_addresskeyword);
+
+        //监听搜索输入框文字变化
         et_addresskeyword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -95,11 +102,22 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //输入框没有文字时
                 if(s.toString().length()==0){
+                    //显示默认的poi地址
                     getDefaultPoi();
+                    //显示预设的家、公司
                     ll_commonaddress.setVisibility(View.VISIBLE);
-                }else {
+                }
+                //输入框有文字时
+                else {
+                    //显示正在搜索
+                    ll_searching.setVisibility(View.VISIBLE);
+                    //隐藏地址列表
+                    listView.setVisibility(View.GONE);
+                    //获取poi地址
                     getPlace(s.toString());
+                    //隐藏预设的家、公司
                     ll_commonaddress.setVisibility(View.GONE);
                 }
             }
@@ -137,11 +155,14 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * 利用百度地图api，获取城市poi信息
+     */
     private void getPlace(String keyword){
 
         Map<String, Object> params = new HashMap();
         params.put("query", keyword);
-        params.put("region", "138"); //140 珠海，138 佛山
+        params.put("region", "140"); //140 珠海，138 佛山
         params.put("output", "json");
         params.put("city_limit", "true");
         params.put("ak", "8wMQn0vRDF7GGrQvI1HXsLov0eWUoYFR");
@@ -156,14 +177,17 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
 
             String message = (String) msg.obj;
             switch (msg.what) {
+                //获取地址失败、网络原因等
                 case Constant.HTTPUTIL_FAILURECODE:
-
+                    getNoResult();
                     break;
                 //根据关键字搜索相关poi
                 case SUCCESSCODE_GETPLACE:
                     try {
                         JSONObject jsonObject = new JSONObject(message);
                         String status = jsonObject.getString("status");
+                        ll_searching.setVisibility(View.GONE);
+                        listView.setVisibility(View.VISIBLE);
                         //成功
                         if ("0".equals(status)) {
                             JSONArray results = jsonObject.getJSONArray("results");
@@ -184,9 +208,8 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
                             listView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         }
-                        //
                         else {
-                            getDefaultPoi();
+                            getNoResult();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -202,6 +225,9 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
             ,"香洲区凤凰南路1088","香洲区金凤路6号","珠海机场","北京师范大学珠海分校","香洲区珠海大道8号华发商都2楼C2021馆"
             ,"993路","香洲区唐中路","广东省珠海九洲大道与白石路交汇处","拱北口岸"};
 
+    /**
+     * 填充默认地址数据
+     */
     private void initDefaultPoiData(){
 
         for(int i=0;i<names.length;i++){
@@ -212,7 +238,9 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-
+    /**
+     * 显示默认地址
+     */
     private void getDefaultPoi(){
         arrays = hotpoi_arrays;
 
@@ -230,4 +258,32 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * 搜索无结果
+     * 数据异常、注册百度参数异常等，界面显示效果
+     */
+    private void getNoResult(){
+        //隐藏正在搜索
+        ll_searching.setVisibility(View.GONE);
+        //显示搜索无结果
+        listView.setVisibility(View.VISIBLE);
+        listView.removeHeaderView(headview);
+        listView.addHeaderView(headview);
+        listView.setDividerHeight(0);
+        //清空搜索结果历史，提示搜索无结果
+        adapter = new PoiListAdapter(DestinationActivity.this, new ArrayList<PoiData>());
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 选择地址后，回传poi名称、地址、经纬度
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = getIntent();
+        intent.putExtra("name",arrays.get(position).getName());
+        setResult(RESULT_OK,intent);
+        doFinish();
+    }
 }

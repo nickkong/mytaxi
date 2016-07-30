@@ -30,20 +30,18 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
 
     private String TAG = getClass().getSimpleName();
 
-    public TextView address_start,tv_yueche_time;
+    private static final int REQUESTCODE_DESTINATION = 1;
+
+    public TextView address_start,tv_yueche_time,address_end;
     private TextView tv_yueche_now,tv_yueche_future;
-    private View ll_time;
-    private View ll_move;
-    private View ll_change_start;
-    private View ll_yueche_now;
-    private View ll_yueche_future;
-    private View line;
+    private View ll_time,ll_move,ll_change_start,ll_yueche_now,ll_yueche_future,line;
     private OnHuishouBtnClickListener listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //初始化控件
         View view = inflater.inflate(R.layout.tab_yueche, container, false);
+
         tv_yueche_now = (TextView) view.findViewById(R.id.tv_yueche_now);
         tv_yueche_future = (TextView) view.findViewById(R.id.tv_yueche_future);
         Button btn_change_huishou = (Button) view.findViewById(R.id.btn_change_huishou);
@@ -52,6 +50,7 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
         btn_yueche.setOnClickListener(this);
         address_start = (TextView) view.findViewById(R.id.address_start);
         tv_yueche_time = (TextView) view.findViewById(R.id.tv_yueche_time);
+        address_end = (TextView) view.findViewById(R.id.address_end);
         ll_time = view.findViewById(R.id.ll_time);
         ll_time.setOnClickListener(this);
         ll_time.setClickable(false);
@@ -144,7 +143,7 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
                 break;
             //选择目的地
             case R.id.ll_change_end:
-                startActivity(new Intent(getActivity(), DestinationActivity.class));
+                startActivityForResult(new Intent(getActivity(), DestinationActivity.class),REQUESTCODE_DESTINATION);
                 break;
             //呼叫出租车
             case R.id.btn_yueche:
@@ -157,6 +156,17 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
                     doVibrator();
                 }
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUESTCODE_DESTINATION && resultCode == Activity.RESULT_OK){
+            String name = data.getStringExtra("name");
+            if(name!=null){
+                address_end.setText(name);
+                address_end.setTextColor(getResources().getColor(R.color.TEXT_FOUR));
+            }
         }
     }
 
