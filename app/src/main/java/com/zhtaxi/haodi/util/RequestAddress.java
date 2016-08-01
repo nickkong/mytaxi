@@ -15,6 +15,8 @@ public class RequestAddress {
     public final static String logout = APP_URL + "logout";
     public final static String uploadGps = APP_URL + "uploadGps";
     public final static String queryNearByUsers = APP_URL + "queryNearByUsers";
+    public final static String startWave = APP_URL + "startWave";
+    public final static String stopWave = APP_URL + "stopWave";
     public final static String suggestion = BAIDU_WEB_URL + "suggestion";
     public final static String search = BAIDU_WEB_URL + "search";
 

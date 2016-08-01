@@ -90,7 +90,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private static final int SUCCESSCODE_UPLOADGPS = 1;
     private static final int SUCCESSCODE_QUERYNEARBYUSERS = 2;
     private static final int HANDLER_UPLOADGPS = 3;
+    private static final int SUCCESSCODE_HUISHOU = 4;
+    private static final int SUCCESSCODE_CANCEL = 5;
 
+    private Button btn_yueche,btn_huishou;
     private long exitTime = 0;
     private int screenWidth;
     private LocationService locationService;
@@ -117,7 +120,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         display.getSize(size);
         screenWidth = size.x;
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
         initView();
 
@@ -144,6 +147,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         btn_me.setOnClickListener(this);
         Button btn_more = (Button) findViewById(R.id.btn_more);
         btn_more.setOnClickListener(this);
+        btn_yueche = (Button) findViewById(R.id.btn_yueche);
+        btn_yueche.setOnClickListener(this);
+        btn_huishou = (Button) findViewById(R.id.btn_huishou);
+        btn_huishou.setOnClickListener(this);
     }
 
     /**
@@ -258,12 +265,51 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     startActivity(new Intent(this, MeActivity.class),false);
 //                    getPlace();
                     break;
+                case R.id.btn_yueche:
+                    resetView();
+                    btn_yueche.setTextColor(getResources().getColor(R.color.MAIN));
+                    vp_control.setCurrentItem(1);
+                    MapStatus.Builder builder_yueche = new MapStatus.Builder();
+                    if(mylocation!=null){
+                        LatLng point = new LatLng(mylocation.getLatitude(),mylocation.getLongitude());
+                        builder_yueche.target(point).zoom(17.9f);
+                    }else {
+                        builder_yueche.zoom(17.9f);
+                    }
+                    mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder_yueche.build()));
+                    mBaiduMap.clear();
+                    addMarker(mylocation);
+                    break;
+                case R.id.btn_huishou:
+                    resetView();
+                    btn_huishou.setTextColor(getResources().getColor(R.color.MAIN));
+                    vp_control.setCurrentItem(0);
+                    MapStatus.Builder builder_huishou = new MapStatus.Builder();
+                    if(mylocation!=null){
+                        LatLng point = new LatLng(mylocation.getLatitude(),mylocation.getLongitude());
+                        builder_huishou.target(point).zoom(18.1f);
+                    }else {
+                        builder_huishou.zoom(18.1f);
+                    }
+                    mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder_huishou.build()));
+                    mBaiduMap.clear();
+                    addMarker(mylocation);
+                    break;
                 //
                 case R.id.btn_more:
-                    showPopupWindow();
+//                    showPopupWindow();
+                    startActivity(new Intent(MainActivity.this, CaptureActivity.class),false);
                     break;
             }
         }
+    }
+
+    /**
+     * 恢复按钮状态
+     */
+    private void resetView(){
+        btn_yueche.setTextColor(getResources().getColor(R.color.white));
+        btn_huishou.setTextColor(getResources().getColor(R.color.white));
     }
 
     /**
@@ -316,7 +362,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     }
 
     @Override
-    public void doYueche() {
+    public void change2Yueche() {
         vp_control.setCurrentItem(1);
         MapStatus.Builder builder = new MapStatus.Builder();
         builder.zoom(17.9f);
@@ -327,12 +373,52 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
     @Override
     public void doHuishou() {
+        showLoadingDialog("挥手中...",1);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                huishou();
+            }
+        }, 2000);
+    }
+
+    @Override
+    public void cancelHuishou() {
+        cancel();
+    }
+
+    @Override
+    public void change2Huishou() {
         vp_control.setCurrentItem(0);
         MapStatus.Builder builder = new MapStatus.Builder();
         builder.zoom(18.1f);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         mBaiduMap.clear();
         addMarker(mylocation);
+    }
+
+    /**
+     * 触发挥手叫车
+     */
+    private void huishou(){
+
+        Map params = generateRequestMap();
+//        params.put("assignName", "0");
+        params.put("assignLat", mylocation.getLatitude()+"");
+        params.put("assignLng", mylocation.getLongitude()+"");
+        params.put("mapType", "0");
+        HttpUtil.doGet(TAG,MainActivity.this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_HUISHOU,
+                RequestAddress.startWave,params);
+    }
+
+    /**
+     * 取消挥手叫车
+     */
+    private void cancel(){
+
+        Map params = generateRequestMap();
+        HttpUtil.doGet(TAG,MainActivity.this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_CANCEL,
+                RequestAddress.stopWave,params);
     }
 
     /**
@@ -479,6 +565,63 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     uploadGps();
                     sb = new StringBuffer();
                     break;
+                //触发挥手叫车
+                case SUCCESSCODE_HUISHOU:
+                    try {
+                        JSONObject jsonObject = new JSONObject(message);
+                        String result = jsonObject.getString("result");
+                        disLoadingDialog();
+                        //挥手成功
+                        if (Constant.RECODE_SUCCESS.equals(result)) {
+
+                            showTipsDialog("已通知附近5位司机",0,null);
+
+                        }
+                        else if (Constant.RECODE_FAILED.equals(result)) {
+                            String errMsgs = jsonObject.getString("errMsgs");
+
+                        }
+                        else if (Constant.RECODE_FAILED_SESSION_WRONG.equals(result)) {
+                            reLogin();
+                            showTipsDialog("登录信息失效，请重新登录",1,dialogClickListener);
+                            //取消自动上传位置信息
+                            task.cancel();
+                            task = null;
+                            timer.cancel();
+                            timer = null;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                //取消挥手叫车
+                case SUCCESSCODE_CANCEL:
+                    try {
+                        JSONObject jsonObject = new JSONObject(message);
+                        String result = jsonObject.getString("result");
+                        disLoadingDialog();
+                        //挥手成功
+                        if (Constant.RECODE_SUCCESS.equals(result)) {
+
+
+                        }
+                        else if (Constant.RECODE_FAILED.equals(result)) {
+                            String errMsgs = jsonObject.getString("errMsgs");
+
+                        }
+                        else if (Constant.RECODE_FAILED_SESSION_WRONG.equals(result)) {
+                            reLogin();
+                            showTipsDialog("登录信息失效，请重新登录",1,dialogClickListener);
+                            //取消自动上传位置信息
+                            task.cancel();
+                            task = null;
+                            timer.cancel();
+                            timer = null;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
         }
     };
@@ -515,27 +658,12 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
                     switch ((int) ((Map<String, Object>) parent.getAdapter().getItem(position)).get("tag")) {
                         case 1:
-//                            findViewById(R.id.ll_saling_price).performClick();
                             Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
                             startActivity(openCameraIntent);
                             break;
                         case 2:
                             findViewById(R.id.btn_message).performClick();
                             break;
-//                        case 3:
-//                            findViewById(R.id.ll_checking_alter).performClick();
-//                            break;
-//                        case 4:
-//                            findViewById(R.id.ll_alter_resale).performClick();
-//                            break;
-//                        case 5:
-//
-//                            break;
-//                        case 6:
-//                            findViewById(R.id.ll_returnback_alter).performClick();
-//                            break;
-//                        default:
-//                            break;
 
                     }
 

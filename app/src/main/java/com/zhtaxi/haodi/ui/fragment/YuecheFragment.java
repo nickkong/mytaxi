@@ -40,7 +40,7 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //初始化控件
-        View view = inflater.inflate(R.layout.tab_yueche, container, false);
+        View view = inflater.inflate(R.layout.tab_yueche2, container, false);
 
         tv_yueche_now = (TextView) view.findViewById(R.id.tv_yueche_now);
         tv_yueche_future = (TextView) view.findViewById(R.id.tv_yueche_future);
@@ -135,7 +135,7 @@ public class YuecheFragment extends BaseFragment implements View.OnClickListener
                 break;
             //切换挥手叫车
             case R.id.btn_change_huishou:
-                listener.doHuishou();
+                listener.change2Huishou();
                 break;
             //选择预约时间
             case R.id.ll_time:

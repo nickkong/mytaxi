@@ -26,7 +26,7 @@
             android:background="@color/TRANSPARENT"
             android:layout_centerVertical="true"
             android:textSize="@dimen/F7"
-            android:textColor="@color/TEXT_SUB"
+            android:textColor="@color/white"
             android:text="我"/>
 
         <Button
@@ -44,14 +44,14 @@
 
         <Button
             android:id="@id/btn_more"
-            android:layout_width="55dp"
+            android:layout_width="75dp"
             android:layout_height="45dp"
             android:background="@color/TRANSPARENT"
             android:layout_centerVertical="true"
-            android:textSize="@dimen/F1"
+            android:textSize="@dimen/F7"
             android:textColor="@color/white"
             android:layout_alignParentRight="true"
-            android:text="+"/>
+            android:text="扫一扫"/>
 
     </RelativeLayout>
 

@@ -55,6 +55,16 @@
                 android:textSize="@dimen/F5"
                 android:layout_weight="1"
                 android:text="挥手叫车"/>
+
+            <Button
+                android:id="@id/btn_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/inputbar"
+                android:background="@color/HIGHLIGHT"
+                android:textColor="@color/white"
+                android:textSize="@dimen/F5"
+                android:layout_weight="2.5"
+                android:text="取消"/>
             <Button
                 android:id="@id/btn_change_yueche"
                 android:layout_width="match_parent"

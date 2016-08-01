@@ -24,15 +24,18 @@ public class HuishouFragment extends BaseFragment implements View.OnClickListene
 
     public TextView address_start;
     private OnYuecheBtnClickListener listener;
+    private Button btn_cancel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //初始化控件
-        View view = inflater.inflate(R.layout.tab_huishou, container, false);
+        View view = inflater.inflate(R.layout.tab_huishou2, container, false);
         Button btn_change_yueche = (Button) view.findViewById(R.id.btn_change_yueche);
         btn_change_yueche.setOnClickListener(this);
         Button btn_huishou = (Button) view.findViewById(R.id.btn_huishou);
         btn_huishou.setOnClickListener(this);
+        btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
+        btn_cancel.setOnClickListener(this);
         address_start = (TextView) view.findViewById(R.id.address_start);
         return view;
     }
@@ -43,7 +46,7 @@ public class HuishouFragment extends BaseFragment implements View.OnClickListene
         switch (v.getId()){
             //切换约车页面
             case R.id.btn_change_yueche:
-                listener.doYueche();
+                listener.change2Yueche();
                 break;
             //挥手叫车
             case R.id.btn_huishou:
@@ -54,7 +57,14 @@ public class HuishouFragment extends BaseFragment implements View.OnClickListene
                 //已登录
                 else {
                     doVibrator();
+                    listener.doHuishou();
+                    btn_cancel.setVisibility(View.VISIBLE);
                 }
+                break;
+            //取消挥手
+            case R.id.btn_cancel:
+                listener.cancelHuishou();
+                btn_cancel.setVisibility(View.GONE);
                 break;
         }
     }

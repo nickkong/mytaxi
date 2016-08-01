@@ -5,5 +5,5 @@ package com.zhtaxi.haodi.ui.listener;
  * Created by NickKong on 15/10/20.
  */
 public interface OnHuishouBtnClickListener {
-    void doHuishou();
+    void change2Huishou();
 }
