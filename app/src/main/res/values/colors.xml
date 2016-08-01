@@ -32,4 +32,9 @@
     <color name="white">#ffffff</color>
     <color name="blue">#0000ff</color>
     <color name="zoomphoto_bg">#191919</color>
+
+    <color name="possible_result_points">#c0ffff00</color>
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="gray_overlay">#ee4EB7A8</color>
 </resources>

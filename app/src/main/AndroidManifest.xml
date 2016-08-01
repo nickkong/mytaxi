@@ -46,20 +46,33 @@
         android:label="@string/app_name"
         android:hardwareAccelerated="true" >
 
-        <!--百度地图-->
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="Tbcom3iYRa3I95rE8DPbwfbw5Sa9BMeN" />
-
         <activity
-            android:name=".ui.MainActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:name=".ui.activity.WelcomeActivity"
+            android:theme="@style/FullTheme"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MessageActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.DestinationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.MeActivity"
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.PersonalInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".widget.zxing.activity.CaptureActivity"
+            android:screenOrientation="portrait"/>
 
         <!--百度地图-->
         <service
@@ -165,20 +178,10 @@
             </intent-filter>
         </receiver>
 
-
-        <activity android:name=".ui.activity.MessageActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.DestinationActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.MeActivity"
-            android:theme="@style/MyTheme"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.PersonalInfoActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.SettingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.LoginActivity"
-            android:screenOrientation="portrait"/>
+        <!--百度地图-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="Tbcom3iYRa3I95rE8DPbwfbw5Sa9BMeN" />
 
         <!--友盟统计-->
         <meta-data android:name="UMENG_APPKEY" android:value="577db8e467e58e8000002f53"/>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.zhtaxi.haodi.ui.activity.MessageActivity;
+import com.zhtaxi.haodi.util.PublicResource;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ public class JpushReceiver extends BroadcastReceiver {
         if (JPushInterface.ACTION_REGISTRATION_ID.equals(intent.getAction())) {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
             Log.d(TAG, "[JpushReceiver] 接收Registration Id : " + regId);
+			PublicResource.REGISTRATION_ID = regId;
             //send the Registration Id to your server...
                         
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {

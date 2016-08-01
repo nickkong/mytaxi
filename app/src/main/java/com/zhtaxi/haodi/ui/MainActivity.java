@@ -1,20 +1,30 @@
 package com.zhtaxi.haodi.ui;
 
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -51,6 +61,7 @@ import com.zhtaxi.haodi.util.Constant;
 import com.zhtaxi.haodi.util.RequestAddress;
 import com.zhtaxi.haodi.util.UpdateManager;
 import com.zhtaxi.haodi.widget.CustomViewPager;
+import com.zhtaxi.haodi.widget.zxing.activity.CaptureActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +92,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private static final int HANDLER_UPLOADGPS = 3;
 
     private long exitTime = 0;
+    private int screenWidth;
     private LocationService locationService;
     private CustomViewPager vp_control;
     private List<Fragment> pages;
@@ -100,6 +112,11 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidth = size.x;
+
         setContentView(R.layout.activity_main);
 
         initView();
@@ -108,7 +125,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
         initMap();
 
-        initWelcomePage();
+//        initWelcomePage();
 
         MobclickAgent.enableEncrypt(true);
 
@@ -125,6 +142,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         btn_message.setOnClickListener(this);
         Button btn_me = (Button) findViewById(R.id.btn_me);
         btn_me.setOnClickListener(this);
+        Button btn_more = (Button) findViewById(R.id.btn_more);
+        btn_more.setOnClickListener(this);
     }
 
     /**
@@ -226,7 +245,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
         //未登录，跳转注册/登录页面
         if(needLogin()){
-            startActivityByFade(new Intent(this, LoginActivity.class));
+            startActivityByFade(new Intent(this, LoginActivity.class),false);
         }else {
             switch (v.getId()){
                 //进入消息中心
@@ -238,6 +257,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                 case R.id.btn_me:
                     startActivity(new Intent(this, MeActivity.class),false);
 //                    getPlace();
+                    break;
+                //
+                case R.id.btn_more:
+                    showPopupWindow();
                     break;
             }
         }
@@ -460,6 +483,97 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         }
     };
 
+    private PopupWindow other_popupWindow;
+    private LinearLayout popupWindowLayout;
+    private ListView popupwindow_listview;
+    private List<Map<String, Object>> popupWindowList = new ArrayList<>();
+    private SimpleAdapter popupWindowAdapter;
+
+    /**
+     * 显示消息、扫一扫
+     */
+    private void showPopupWindow() {
+
+        if (popupWindowLayout == null || popupwindow_listview == null) {
+
+            popupWindowLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.popupwindow_view, null);
+            popupWindowLayout.setHorizontalGravity(Gravity.CENTER);
+
+            popupwindow_listview = (ListView) popupWindowLayout.findViewById(R.id.popupwindow_listview);
+            popupwindow_listview.setClickable(true);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) popupwindow_listview.getLayoutParams();
+            layoutParams.width = screenWidth / 3 - getResources().getDimensionPixelSize(R.dimen.line) * 2;
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            layoutParams.gravity = Gravity.CENTER;
+            popupwindow_listview.setLayoutParams(layoutParams);
+
+            popupwindow_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    other_popupWindow.dismiss();
+
+                    switch ((int) ((Map<String, Object>) parent.getAdapter().getItem(position)).get("tag")) {
+                        case 1:
+//                            findViewById(R.id.ll_saling_price).performClick();
+                            Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                            startActivity(openCameraIntent);
+                            break;
+                        case 2:
+                            findViewById(R.id.btn_message).performClick();
+                            break;
+//                        case 3:
+//                            findViewById(R.id.ll_checking_alter).performClick();
+//                            break;
+//                        case 4:
+//                            findViewById(R.id.ll_alter_resale).performClick();
+//                            break;
+//                        case 5:
+//
+//                            break;
+//                        case 6:
+//                            findViewById(R.id.ll_returnback_alter).performClick();
+//                            break;
+//                        default:
+//                            break;
+
+                    }
+
+                }
+            });
+
+            popupWindowAdapter = new SimpleAdapter(this, popupWindowList, R.layout.popupwindow_item_view,
+                    new String[]{"img", "txt"}, new int[]{R.id.img, R.id.txt});
+            popupwindow_listview.setAdapter(popupWindowAdapter);
+
+            other_popupWindow = new PopupWindow(popupWindowLayout,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
+            other_popupWindow.setBackgroundDrawable(new BitmapDrawable(getResources()));
+            other_popupWindow.setFocusable(true);
+            other_popupWindow.setTouchable(true);
+            other_popupWindow.setOutsideTouchable(true);
+
+        }
+
+        popupWindowList.clear();
+
+        Map<String, Object> item = new HashMap<>();
+        item.put("img", R.mipmap.start);
+        item.put("txt", "扫一扫");
+        item.put("tag", 1);
+        popupWindowList.add(item);
+
+        item = new HashMap<>();
+        item.put("img", R.mipmap.end);
+        item.put("txt", "消息");
+        item.put("tag", 2);
+        popupWindowList.add(item);
+
+        popupWindowAdapter.notifyDataSetChanged();
+
+        other_popupWindow.showAsDropDown(findViewById(R.id.btn_more), screenWidth / 3, 0);
+    }
+
     /**
      * 按钮事件监听
      */
@@ -468,7 +582,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         public void doConfirm() {
             //未登录，跳转注册/登录页面
             if(needLogin()){
-                startActivityByFade(new Intent(MainActivity.this, LoginActivity.class));
+                startActivityByFade(new Intent(MainActivity.this, LoginActivity.class),false);
             }
         }
 

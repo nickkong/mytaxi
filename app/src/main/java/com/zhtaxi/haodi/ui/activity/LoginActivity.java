@@ -16,6 +16,7 @@ import com.nickkong.commonlibrary.util.HttpUtil;
 import com.nickkong.commonlibrary.util.Tools;
 import com.zhtaxi.haodi.R;
 import com.zhtaxi.haodi.util.Constant;
+import com.zhtaxi.haodi.util.PublicResource;
 import com.zhtaxi.haodi.util.RequestAddress;
 
 import org.json.JSONException;
@@ -25,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * 登录页面，首次验证为注册，再次验证为登录
@@ -64,6 +67,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
      */
     @Override
     protected void initView() {
+
+        //首次注册推送服务后，getRegistrationID才不为空
+        if(!"".equals(JPushInterface.getRegistrationID(this))){
+            PublicResource.REGISTRATION_ID = JPushInterface.getRegistrationID(this);
+        }
+
         SharedPreferences sp = getSharedPreferences(getString(R.string.app_name), Activity.MODE_PRIVATE);
         editor = sp.edit();
 
@@ -127,8 +136,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
                 phone = et_phone.getText().toString().trim();
                 Map params = new HashMap();
+                params.put("userType", "0");//0:乘客,1:司机
                 params.put("mobilePhone", phone);
                 params.put("certCode", et_certCode.getText().toString().trim());
+                params.put("deviceId", PublicResource.REGISTRATION_ID);
                 HttpUtil.doGet(TAG,LoginActivity.this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_LOGIN,
                         RequestAddress.login,params);
 

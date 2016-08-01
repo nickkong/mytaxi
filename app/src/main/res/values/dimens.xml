@@ -34,4 +34,6 @@
     <dimen name="corner_radius">3dp</dimen>
     <dimen name="dialog_corner_radius">5dp</dimen>
 
+    <dimen name="line">0.8dp</dimen>
+
 </resources>

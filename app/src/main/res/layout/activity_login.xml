@@ -108,7 +108,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/F8"
             android:layout_gravity="center"
-            android:text="登录"/>
+            android:text="确定"/>
 
         <TextView
             android:layout_width="wrap_content"

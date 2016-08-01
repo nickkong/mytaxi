@@ -39,7 +39,19 @@
             android:textColor="@color/TEXT_SUB"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/interval_E"
-            android:text="消息"/>
+            android:text="消息"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@id/btn_more"
+            android:layout_width="55dp"
+            android:layout_height="45dp"
+            android:background="@color/TRANSPARENT"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/F1"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:text="+"/>
 
     </RelativeLayout>
 

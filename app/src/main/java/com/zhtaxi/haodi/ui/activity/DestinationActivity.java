@@ -139,7 +139,7 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
             case R.id.ll_home:
                 //未登录，跳转注册/登录页面
                 if(needLogin()){
-                    startActivityByFade(new Intent(this, LoginActivity.class));
+                    startActivityByFade(new Intent(this, LoginActivity.class),false);
                 }else {
 
                 }
@@ -147,7 +147,7 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
             case R.id.ll_company:
                 //未登录，跳转注册/登录页面
                 if(needLogin()){
-                    startActivityByFade(new Intent(this, LoginActivity.class));
+                    startActivityByFade(new Intent(this, LoginActivity.class),false);
                 }else {
 
                 }
