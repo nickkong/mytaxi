@@ -78,7 +78,7 @@ import java.util.TimerTask;
  * 主界面，默认显示挥手叫车
  * Created by NickKong on 16/7/2.
  */
-public class MainActivity extends BaseActivity implements OnClickListener,
+public class MainActivity1 extends BaseActivity implements OnClickListener,
                     OnYuecheBtnClickListener,OnHuishouBtnClickListener {
 
     private String TAG = getClass().getSimpleName();
@@ -91,9 +91,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private static final int SUCCESSCODE_QUERYNEARBYUSERS = 2;
     private static final int HANDLER_UPLOADGPS = 3;
     private static final int SUCCESSCODE_HUISHOU = 4;
-    private static final int SUCCESSCODE_CANCEL = 5;
 
-    private Button btn_yueche,btn_huishou;
     private long exitTime = 0;
     private int screenWidth;
     private LocationService locationService;
@@ -120,7 +118,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         display.getSize(size);
         screenWidth = size.x;
 
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
 
         initView();
 
@@ -129,8 +127,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         initMap();
 
 //        initWelcomePage();
-
-        checkUpdate();
 
         MobclickAgent.enableEncrypt(true);
 
@@ -149,10 +145,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         btn_me.setOnClickListener(this);
         Button btn_more = (Button) findViewById(R.id.btn_more);
         btn_more.setOnClickListener(this);
-        btn_yueche = (Button) findViewById(R.id.btn_yueche);
-        btn_yueche.setOnClickListener(this);
-        btn_huishou = (Button) findViewById(R.id.btn_huishou);
-        btn_huishou.setOnClickListener(this);
     }
 
     /**
@@ -181,25 +173,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     }
 
     /**
-     * 检查更新
-     */
-    private void checkUpdate(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //wifi状态检查更新
-                    if(Tools.isWifiConnected(MainActivity.this)){
-                        UpdateManager mUpdateManager = new UpdateManager(MainActivity.this);
-                        mUpdateManager.sendUpdateRequest();
-                    }
-                } catch (Exception e) {
-                }
-            }
-        }, DISAPPEAR_DELAY);
-    }
-
-    /**
      * 初始化欢迎页
      */
     private void initWelcomePage(){
@@ -225,8 +198,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
                 try {
                     //wifi状态检查更新
-                    if(Tools.isWifiConnected(MainActivity.this)){
-                        UpdateManager mUpdateManager = new UpdateManager(MainActivity.this);
+                    if(Tools.isWifiConnected(MainActivity1.this)){
+                        UpdateManager mUpdateManager = new UpdateManager(MainActivity1.this);
                         mUpdateManager.sendUpdateRequest();
                     }
                 } catch (Exception e) {
@@ -286,51 +259,12 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     startActivity(new Intent(this, MeActivity.class),false);
 //                    getPlace();
                     break;
-                case R.id.btn_yueche:
-                    resetView();
-                    btn_yueche.setTextColor(getResources().getColor(R.color.MAIN));
-                    vp_control.setCurrentItem(1);
-                    MapStatus.Builder builder_yueche = new MapStatus.Builder();
-                    if(mylocation!=null){
-                        LatLng point = new LatLng(mylocation.getLatitude(),mylocation.getLongitude());
-                        builder_yueche.target(point).zoom(17.9f);
-                    }else {
-                        builder_yueche.zoom(17.9f);
-                    }
-                    mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder_yueche.build()));
-                    mBaiduMap.clear();
-                    addMarker(mylocation);
-                    break;
-                case R.id.btn_huishou:
-                    resetView();
-                    btn_huishou.setTextColor(getResources().getColor(R.color.MAIN));
-                    vp_control.setCurrentItem(0);
-                    MapStatus.Builder builder_huishou = new MapStatus.Builder();
-                    if(mylocation!=null){
-                        LatLng point = new LatLng(mylocation.getLatitude(),mylocation.getLongitude());
-                        builder_huishou.target(point).zoom(18.1f);
-                    }else {
-                        builder_huishou.zoom(18.1f);
-                    }
-                    mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder_huishou.build()));
-                    mBaiduMap.clear();
-                    addMarker(mylocation);
-                    break;
                 //
                 case R.id.btn_more:
-//                    showPopupWindow();
-                    startActivity(new Intent(MainActivity.this, CaptureActivity.class),false);
+                    showPopupWindow();
                     break;
             }
         }
-    }
-
-    /**
-     * 恢复按钮状态
-     */
-    private void resetView(){
-        btn_yueche.setTextColor(getResources().getColor(R.color.white));
-        btn_huishou.setTextColor(getResources().getColor(R.color.white));
     }
 
     /**
@@ -393,6 +327,11 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     }
 
     @Override
+    public void cancelHuishou() {
+
+    }
+
+    @Override
     public void doHuishou() {
         showLoadingDialog("挥手中...",1);
         new Handler().postDelayed(new Runnable() {
@@ -401,11 +340,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                 huishou();
             }
         }, 2000);
-    }
-
-    @Override
-    public void cancelHuishou() {
-        cancel();
     }
 
     @Override
@@ -428,18 +362,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         params.put("assignLat", mylocation.getLatitude()+"");
         params.put("assignLng", mylocation.getLongitude()+"");
         params.put("mapType", "0");
-        HttpUtil.doGet(TAG,MainActivity.this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_HUISHOU,
+        HttpUtil.doGet(TAG,MainActivity1.this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_HUISHOU,
                 RequestAddress.startWave,params);
-    }
-
-    /**
-     * 取消挥手叫车
-     */
-    private void cancel(){
-
-        Map params = generateRequestMap();
-        HttpUtil.doGet(TAG,MainActivity.this,mHandler,Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_CANCEL,
-                RequestAddress.stopWave,params);
     }
 
     /**
@@ -615,34 +539,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                         e.printStackTrace();
                     }
                     break;
-                //取消挥手叫车
-                case SUCCESSCODE_CANCEL:
-                    try {
-                        JSONObject jsonObject = new JSONObject(message);
-                        String result = jsonObject.getString("result");
-                        disLoadingDialog();
-                        //挥手成功
-                        if (Constant.RECODE_SUCCESS.equals(result)) {
-
-
-                        }
-                        else if (Constant.RECODE_FAILED.equals(result)) {
-                            String errMsgs = jsonObject.getString("errMsgs");
-
-                        }
-                        else if (Constant.RECODE_FAILED_SESSION_WRONG.equals(result)) {
-                            reLogin();
-                            showTipsDialog("登录信息失效，请重新登录",1,dialogClickListener);
-                            //取消自动上传位置信息
-                            task.cancel();
-                            task = null;
-                            timer.cancel();
-                            timer = null;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
             }
         }
     };
@@ -679,7 +575,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
                     switch ((int) ((Map<String, Object>) parent.getAdapter().getItem(position)).get("tag")) {
                         case 1:
-                            Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                            Intent openCameraIntent = new Intent(MainActivity1.this, CaptureActivity.class);
                             startActivity(openCameraIntent);
                             break;
                         case 2:
@@ -731,7 +627,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         public void doConfirm() {
             //未登录，跳转注册/登录页面
             if(needLogin()){
-                startActivityByFade(new Intent(MainActivity.this, LoginActivity.class),false);
+                startActivityByFade(new Intent(MainActivity1.this, LoginActivity.class),false);
             }
         }
 
