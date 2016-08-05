@@ -271,21 +271,9 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onClick(View v) {
 
-        //未登录，跳转注册/登录页面
-        if(needLogin()){
-            startActivityByFade(new Intent(this, LoginActivity.class),false);
-        }else {
+        //不需要校验登录也能操作的功能
+        if(v.getId()==R.id.btn_yueche || v.getId()==R.id.btn_huishou){
             switch (v.getId()){
-                //进入消息中心
-                case R.id.btn_message:
-                    startActivity(new Intent(this, MessageActivity.class),false);
-//                    getNearByUsers();
-                    break;
-                //进入我的
-                case R.id.btn_me:
-                    startActivity(new Intent(this, MeActivity.class),false);
-//                    getPlace();
-                    break;
                 case R.id.btn_yueche:
                     resetView();
                     btn_yueche.setTextColor(getResources().getColor(R.color.MAIN));
@@ -316,11 +304,31 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     mBaiduMap.clear();
                     addMarker(mylocation);
                     break;
-                //
-                case R.id.btn_more:
+            }
+        }
+        //需要校验登录也能操作的功能
+        else {
+            //未登录，跳转注册/登录页面
+            if(needLogin()){
+                startActivityByFade(new Intent(this, LoginActivity.class),false);
+            }else {
+                switch (v.getId()){
+                    //进入消息中心
+                    case R.id.btn_message:
+                        startActivity(new Intent(this, MessageActivity.class),false);
+//                    getNearByUsers();
+                        break;
+                    //进入我的
+                    case R.id.btn_me:
+                        startActivity(new Intent(this, MeActivity.class),false);
+                        break;
+                    //
+                    case R.id.btn_more:
 //                    showPopupWindow();
-                    startActivity(new Intent(MainActivity.this, CaptureActivity.class),false);
-                    break;
+//                        startActivity(new Intent(MainActivity.this, CaptureActivity.class),false);
+                        getNearByUsers();
+                        break;
+                }
             }
         }
     }
@@ -356,8 +364,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
      */
     private void getNearByUsers(){
         Map<String, Object> params = new HashMap();
-        params.put("lat", mylocation.getLatitude());
-        params.put("lng", mylocation.getLongitude());
+        params.put("lat", mylocation.getLatitude()+"");
+        params.put("lng", mylocation.getLongitude()+"");
 //        params.put("distanceLessThan", "5");
         HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_QUERYNEARBYUSERS,
                 RequestAddress.queryNearByUsers,params);
@@ -373,7 +381,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private void uploadGps(){
 //        Log.d(TAG,"sb.toString()==="+sb.toString());
         Map params = generateRequestMap();
-        params.put("licensePlate", "粤Y99999");
+//        params.put("licensePlate", "粤Y99999");
         params.put("isTrip", "0");
 //        params.put("orderNo", "0");
         params.put("mapType", "0");
@@ -579,7 +587,13 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     break;
                 //获取附近车辆
                 case SUCCESSCODE_QUERYNEARBYUSERS:
-
+                    try {
+                        JSONObject jsonObject = new JSONObject(message);
+                        String result = jsonObject.getString("result");
+                        Tools.showToast(MainActivity.this,message);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 //定时上传GPS
                 case HANDLER_UPLOADGPS:
@@ -594,9 +608,13 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                         disLoadingDialog();
                         //挥手成功
                         if (Constant.RECODE_SUCCESS.equals(result)) {
+                            String noticeCarNum = jsonObject.getString("noticeCarNum");
 
-                            showTipsDialog("已通知附近5位司机",0,null);
-
+                            if("0".equals(noticeCarNum)){
+                                showTipsDialog("附近暂时没有司机",0,null);
+                            }else {
+                                showTipsDialog("已通知附近"+noticeCarNum+"位司机",0,null);
+                            }
                         }
                         else if (Constant.RECODE_FAILED.equals(result)) {
                             String errMsgs = jsonObject.getString("errMsgs");
@@ -606,10 +624,16 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                             reLogin();
                             showTipsDialog("登录信息失效，请重新登录",1,dialogClickListener);
                             //取消自动上传位置信息
-                            task.cancel();
-                            task = null;
-                            timer.cancel();
-                            timer = null;
+                            if(task!=null){
+                                task.cancel();
+                                task = null;
+                            }
+                            if(timer!=null){
+                                timer.cancel();
+                                timer = null;
+                            }
+
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

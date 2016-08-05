@@ -125,8 +125,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
                         }
                         else if (Constant.RECODE_FAILED_SESSION_WRONG.equals(result)) {
-                            reLogin();
-                            showTipsDialog("登录信息失效，请重新登录",1,dialogClickListener);
+//                            reLogin();
+//                            showTipsDialog("登录信息失效，请重新登录",1,dialogClickListener);
+                            doFinishByFade();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
