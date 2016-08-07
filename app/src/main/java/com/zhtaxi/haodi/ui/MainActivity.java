@@ -403,12 +403,13 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     @Override
     public void doHuishou() {
         showLoadingDialog("挥手中...",1);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                huishou();
-            }
-        }, 2000);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                huishou();
+//            }
+//        }, 2000);
+        huishou();
     }
 
     @Override
