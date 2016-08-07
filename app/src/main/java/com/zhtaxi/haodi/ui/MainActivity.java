@@ -316,7 +316,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     //进入消息中心
                     case R.id.btn_message:
                         startActivity(new Intent(this, MessageActivity.class),false);
-//                    getNearByUsers();
                         break;
                     //进入我的
                     case R.id.btn_me:
@@ -325,8 +324,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     //
                     case R.id.btn_more:
 //                    showPopupWindow();
-//                        startActivity(new Intent(MainActivity.this, CaptureActivity.class),false);
-                        getNearByUsers();
+                        startActivity(new Intent(MainActivity.this, CaptureActivity.class),false);
+//                        getNearByUsers();
                         break;
                 }
             }
