@@ -32,10 +32,12 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.LogoPosition;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
@@ -86,12 +88,14 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private static final int APPEAR_DELAY = 2000;
     private static final int DISAPPEAR_DELAY = 2500;
     private static final int UPLOADGPS_PERIOD = 5000;
+    private static final int GETNEARBYUSERS_PERIOD = 10000;
 
     private static final int SUCCESSCODE_UPLOADGPS = 1;
     private static final int SUCCESSCODE_QUERYNEARBYUSERS = 2;
     private static final int HANDLER_UPLOADGPS = 3;
     private static final int SUCCESSCODE_HUISHOU = 4;
     private static final int SUCCESSCODE_CANCEL = 5;
+    private static final int HANDLER_GETNEARBYUSERS = 6;
 
     private Button btn_yueche,btn_huishou;
     private long exitTime = 0;
@@ -178,6 +182,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         builder.target(ll).zoom(15.0f);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
 
+        mBaiduMap.setOnMarkerClickListener(listener);
     }
 
     /**
@@ -359,15 +364,36 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     }
 
     /**
+     * 定时执行获取附近车和人
+     */
+    private void doGetNearByUsers(){
+
+        timer = new Timer(true);
+
+        task = new TimerTask() {
+
+            public void run() {
+                mHandler.sendEmptyMessage(HANDLER_GETNEARBYUSERS);
+            }
+        };
+
+        timer.schedule(task, 0, UPLOADGPS_PERIOD);
+
+    }
+
+    /**
      * 获取附近车辆和人位置信息
      */
     private void getNearByUsers(){
-        Map<String, Object> params = new HashMap();
-        params.put("lat", mylocation.getLatitude()+"");
-        params.put("lng", mylocation.getLongitude()+"");
+        Log.d(TAG,"mylocation==="+mylocation);
+        if(mylocation!=null){
+            Map<String, Object> params = new HashMap();
+            params.put("lat", mylocation.getLatitude()+"");
+            params.put("lng", mylocation.getLongitude()+"");
 //        params.put("distanceLessThan", "5");
-        HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_QUERYNEARBYUSERS,
-                RequestAddress.queryNearByUsers,params);
+            HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_QUERYNEARBYUSERS,
+                    RequestAddress.queryNearByUsers,params);
+        }
 
     }
 
@@ -521,25 +547,25 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         //构建MarkerOption，用于在地图上添加Marker
         OverlayOptions makeroption = new MarkerOptions()
                 .position(point).rotate(-fnum)
-                .icon(bitmap);
+                .icon(bitmap).title("0");
         OverlayOptions makeroption1 = new MarkerOptions()
                 .position(point1).rotate(fnum)
-                .icon(bitmap);
+                .icon(bitmap).title("1");
         OverlayOptions makeroption2 = new MarkerOptions()
                 .position(point2).rotate(-fnum)
-                .icon(bitmap);
+                .icon(bitmap).title("2");
         OverlayOptions makeroption3 = new MarkerOptions()
                 .position(point3).rotate(fnum)
-                .icon(bitmap);
+                .icon(bitmap).title("3");
         OverlayOptions makeroption4 = new MarkerOptions()
                 .position(point4).rotate(-fnum)
-                .icon(bitmap);
+                .icon(bitmap).title("4");
         OverlayOptions makeroption5 = new MarkerOptions()
                 .position(point5).rotate(fnum)
-                .icon(bitmap);
+                .icon(bitmap).title("5");
         OverlayOptions makeroption6 = new MarkerOptions()
                 .position(point6).rotate(fnum)
-                .icon(bitmap);
+                .icon(bitmap).title("6");
         //在地图上添加Marker，并显示
         mBaiduMap.addOverlay(makeroption);
         mBaiduMap.addOverlay(makeroption1);
@@ -548,6 +574,24 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         mBaiduMap.addOverlay(makeroption4);
         mBaiduMap.addOverlay(makeroption5);
         mBaiduMap.addOverlay(makeroption6);
+
+    }
+
+    /**
+     * 点击marker显示信息框
+     */
+    private void showInfoWindow(LatLng pt){
+        View view = getLayoutInflater().inflate(R.layout.infowindow,null);
+//        //创建InfoWindow展示的view
+//        Button button = new Button(getApplicationContext());
+//        button.setBackgroundResource(R.color.TEXT_BG);
+//        button.setText("弹出框");
+        //定义用于显示该InfoWindow的坐标点
+//        LatLng pt = new LatLng(39.86923, 116.397428);
+        //创建InfoWindow , 传入 view， 地理坐标， y 轴偏移量
+        InfoWindow mInfoWindow = new InfoWindow(view, pt, -47);
+        //显示InfoWindow
+        mBaiduMap.showInfoWindow(mInfoWindow);
     }
 
     Handler mHandler = new Handler() {
@@ -590,7 +634,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     try {
                         JSONObject jsonObject = new JSONObject(message);
                         String result = jsonObject.getString("result");
-                        Tools.showToast(MainActivity.this,message);
+//                        Tools.showToast(MainActivity.this,message);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -599,6 +643,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                 case HANDLER_UPLOADGPS:
                     uploadGps();
                     sb = new StringBuffer();
+                    break;
+                //定时获取附近人和车
+                case HANDLER_GETNEARBYUSERS:
+                    getNearByUsers();
                     break;
                 //触发挥手叫车
                 case SUCCESSCODE_HUISHOU:
@@ -668,6 +716,19 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     }
                     break;
             }
+        }
+    };
+
+    /**
+     * 点击车辆事件监听
+     */
+    BaiduMap.OnMarkerClickListener listener = new BaiduMap.OnMarkerClickListener() {
+
+        public boolean onMarkerClick(Marker marker){
+
+            showInfoWindow(marker.getPosition());
+
+            return true;
         }
     };
 
@@ -827,9 +888,12 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         locationService.setLocationOption(locationService.getDefaultLocationClientOption());
         locationService.start();
 
+//        if(!needLogin()){
+//            sb = new StringBuffer();
+//            doUploadGps();
+//        }
         if(!needLogin()){
-            sb = new StringBuffer();
-            doUploadGps();
+            doGetNearByUsers();
         }
         super.onResume();
     }
