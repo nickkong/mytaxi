@@ -404,15 +404,16 @@ public class MainActivity extends BaseActivity implements OnClickListener,
      * locations=纬度1,经度1,时间1long型;纬度2,经度2,时间2long型;纬度3,经度3,时间3long型;纬度4,经度4,时间4long型;
      */
     private void uploadGps(){
-//        Log.d(TAG,"sb.toString()==="+sb.toString());
-        Map params = generateRequestMap();
+        if(sb.toString().length()>0){
+            Map params = generateRequestMap();
 //        params.put("licensePlate", "粤Y99999");
-        params.put("isTrip", "0");
+            params.put("isTrip", "0");
 //        params.put("orderNo", "0");
-        params.put("mapType", "0");
-        params.put("locations", sb.toString());
-        HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_UPLOADGPS,
-                RequestAddress.uploadGps,params);
+            params.put("mapType", "0");
+            params.put("locations", sb.toString());
+            HttpUtil.doGet(TAG,this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_UPLOADGPS,
+                    RequestAddress.uploadGps,params);
+        }
     }
 
     @Override
@@ -488,6 +489,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                 return;
             }
             mylocation = location;
+
             if(tab1!=null && tab2!=null){
                 if(tab1.address_start!=null && tab2.address_start!=null){
                     tab1.address_start.setText(location.getLocationDescribe());
@@ -495,24 +497,25 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                 }
             }
 
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
+
             //经度和纬度都不是返回4.9E-324才记录
-            if(!Constant.LOCATION_ERROR.equals(location.getLatitude())&&
-                    !Constant.LOCATION_ERROR.equals(location.getLongitude())){
-                sb.append(location.getLatitude()+","+location.getLongitude()+","+System.currentTimeMillis()+";");
+            if(!Constant.LOCATION_ERROR.equals(lat+"") && !Constant.LOCATION_ERROR.equals(lng+"")){
+                sb.append(lat+","+lng+","+System.currentTimeMillis()+";");
             }
 
             MyLocationData locData = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
-                    .direction(location.getDerect()).latitude(location.getLatitude())
-                    .longitude(location.getLongitude()).build();
+                    .direction(location.getDerect()).latitude(lat)
+                    .longitude(lng).build();
 
             mBaiduMap.setMyLocationData(locData);
 
             if (isFirstLoc) {
 
                 isFirstLoc = false;
-                LatLng ll = new LatLng(location.getLatitude(),
-                        location.getLongitude());
+                LatLng ll = new LatLng(lat,lng);
                 MapStatus.Builder builder = new MapStatus.Builder();
                 builder.target(ll).zoom(18.0f);
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
@@ -888,13 +891,13 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         locationService.setLocationOption(locationService.getDefaultLocationClientOption());
         locationService.start();
 
-//        if(!needLogin()){
-//            sb = new StringBuffer();
-//            doUploadGps();
-//        }
         if(!needLogin()){
-            doGetNearByUsers();
+            sb = new StringBuffer();
+            doUploadGps();
         }
+//        if(!needLogin()){
+//            doGetNearByUsers();
+//        }
         super.onResume();
     }
 
