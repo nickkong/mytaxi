@@ -205,6 +205,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
                             String userId = jsonObject.getString("userId");
                             String sessionId = jsonObject.getString("sessionId");
+                            //当前有正在行程中订单时返回1
+                            String isTrip = jsonObject.getString("isTrip");
+                            if("1".equals(isTrip)){
+                                //当前有正在行程中订单时返回
+                                String orderNo = jsonObject.getString("orderNo");
+                                //司机端或有在行程中的用户则有返回当前的车辆id
+                                String carId = jsonObject.getString("carId");
+                                //司机端或有在行程中的用户则有返回当前的车牌号码
+                                String licensePlate = jsonObject.getString("licensePlate");
+                            }
+
                             editor_user.putString("userId",userId);
                             editor_user.putString("sessionId",sessionId);
                             editor_user.commit();

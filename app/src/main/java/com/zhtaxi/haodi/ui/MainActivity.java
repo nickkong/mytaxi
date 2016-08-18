@@ -1,6 +1,9 @@
 package com.zhtaxi.haodi.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -96,6 +99,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private static final int SUCCESSCODE_HUISHOU = 4;
     private static final int SUCCESSCODE_CANCEL = 5;
     private static final int HANDLER_GETNEARBYUSERS = 6;
+    private static final int SUCCESSCODE_CONFIRMWAVE = 7;
+
+    public static boolean isForeground = false;
+    public static final String KEY_MESSAGE = "message";
 
     private Button btn_yueche,btn_huishou;
     private long exitTime = 0;
@@ -114,6 +121,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private StringBuffer sb = new StringBuffer();
     private Timer timer;
     private TimerTask task;
+
+    private String matchingKey;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -718,6 +727,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                         e.printStackTrace();
                     }
                     break;
+                //匹配挥手成功
+                case SUCCESSCODE_CONFIRMWAVE:
+
+                    break;
             }
         }
     };
@@ -830,6 +843,26 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     };
 
     /**
+     * 按钮事件监听
+     */
+    private OnDialogClickListener confirmIsTripClickListener = new OnDialogClickListener() {
+        @Override
+        public void doConfirm() {
+            //确认上车
+            Map<String, Object> params = new HashMap();
+            params.put("haode_session_id", sp_user.getString("sessionId",""));
+            params.put("matchingKey", matchingKey);
+            HttpUtil.doGet(TAG,MainActivity.this,mHandler, Constant.HTTPUTIL_FAILURECODE,SUCCESSCODE_CONFIRMWAVE,
+                    RequestAddress.confirmWave,params);
+        }
+
+        @Override
+        public void doConfirm(int type) {
+
+        }
+    };
+
+    /**
      * 按两次手机返回键退出程序
      */
     @Override
@@ -863,6 +896,9 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onPause() {
         Log.d(TAG,"===onPause===");
+
+        isForeground = false;
+
         mMapView.onPause();
 
         locationService.unregisterListener(myListener);
@@ -884,6 +920,9 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onResume() {
         Log.d(TAG,"===onResume===");
+
+        isForeground = true;
+
         mMapView.onResume();
 
         locationService = ((HaodiApplication)getApplication()).locationService;
@@ -909,6 +948,47 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         mMapView.onDestroy();
         mMapView = null;
         super.onDestroy();
+    }
+
+    private MessageReceiver mMessageReceiver;
+
+    public void registerMessageReceiver() {
+        mMessageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        filter.addAction(Constant.MESSAGE_RECEIVED_ACTION);
+        registerReceiver(mMessageReceiver, filter);
+    }
+
+    public class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Constant.MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+                String message = intent.getStringExtra(KEY_MESSAGE);
+                Log.d(TAG,"message=="+message);
+                try {
+                    JSONObject jsonObject = new JSONObject(message);
+                    String event = jsonObject.getString("event");
+
+                    //成功挥手匹配，弹出确认
+                    if(Constant.EVENT_HUISHOUMATCH.equals(event)){
+                        matchingKey = jsonObject.getString("matchingKey");
+                        showTipsDialog("已成功为您匹配到司机，您是否已上车？",2,confirmIsTripClickListener);
+                    }
+
+//                    double d_lat = Double.parseDouble(lat);
+//                    double d_lng = Double.parseDouble(lng);
+
+//                    addmarker(d_lat,d_lng);
+//                    speech();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
     }
 
 }

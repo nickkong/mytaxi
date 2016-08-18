@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.zhtaxi.haodi.ui.MainActivity;
 import com.zhtaxi.haodi.ui.activity.MessageActivity;
+import com.zhtaxi.haodi.util.Constant;
 import com.zhtaxi.haodi.util.PublicResource;
 
 import org.json.JSONException;
@@ -104,12 +106,12 @@ public class JpushReceiver extends BroadcastReceiver {
 	
 	//send msg to MainActivity
 	private void processCustomMessage(Context context, Bundle bundle) {
-//		if (MainActivity.isForeground) {
-//			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
-//			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-//			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-//			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
-//			if (!ExampleUtil.isEmpty(extras)) {
+		if (MainActivity.isForeground) {
+			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+			Intent msgIntent = new Intent(Constant.MESSAGE_RECEIVED_ACTION);
+			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
+//			if (!Tools.isEmpty(extras)) {
 //				try {
 //					JSONObject extraJson = new JSONObject(extras);
 //					if (null != extraJson && extraJson.length() > 0) {
@@ -120,7 +122,7 @@ public class JpushReceiver extends BroadcastReceiver {
 //				}
 //
 //			}
-//			context.sendBroadcast(msgIntent);
-//		}
+			context.sendBroadcast(msgIntent);
+		}
 	}
 }

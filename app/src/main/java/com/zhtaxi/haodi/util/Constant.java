@@ -16,6 +16,8 @@ public class Constant {
 
     public final static String BASE_DIR = Environment.getExternalStorageDirectory().toString() + "/haodi/";
 
+    public static final String MESSAGE_RECEIVED_ACTION = "com.zhtaxi.haodi.MESSAGE_RECEIVED_ACTION";
+
     public final static int INIT_PAGENO = 1;
     public final static int INIT_PAGESIZE = 10;
 
@@ -28,6 +30,12 @@ public class Constant {
     public final static int HTTP_STATUS_CODE_SUCCESS = 200;
 
     public final static int HTTPUTIL_FAILURECODE = 9999;
+
+    public final static String EVENT_HUISHOUSTART = "0000";
+    public final static String EVENT_HUISHOUCANCEL = "0001";
+    public final static String EVENT_HUISHOUMATCH = "0003";
+    public final static String EVENT_NEWORDER = "0030";
+    public final static String EVENT_ARRIVE = "0031";
 
     public final static String RECODE_SUCCESS = "1";
     public final static String RECODE_FAILED = "0000";
