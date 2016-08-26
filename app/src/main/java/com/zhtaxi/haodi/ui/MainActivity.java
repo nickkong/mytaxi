@@ -19,11 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.AnimationSet;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -47,6 +44,8 @@ import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nickkong.commonlibrary.service.LocationService;
 import com.nickkong.commonlibrary.ui.activity.BaseActivity;
 import com.nickkong.commonlibrary.ui.listener.OnDialogClickListener;
@@ -55,6 +54,9 @@ import com.nickkong.commonlibrary.util.Tools;
 import com.umeng.analytics.MobclickAgent;
 import com.zhtaxi.haodi.HaodiApplication;
 import com.zhtaxi.haodi.R;
+import com.zhtaxi.haodi.domain.Drivers;
+import com.zhtaxi.haodi.domain.Passengers;
+import com.zhtaxi.haodi.ui.activity.EvaluateActivity;
 import com.zhtaxi.haodi.ui.activity.LoginActivity;
 import com.zhtaxi.haodi.ui.activity.MeActivity;
 import com.zhtaxi.haodi.ui.activity.MessageActivity;
@@ -68,9 +70,11 @@ import com.zhtaxi.haodi.util.UpdateManager;
 import com.zhtaxi.haodi.widget.CustomViewPager;
 import com.zhtaxi.haodi.widget.zxing.activity.CaptureActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -105,6 +109,8 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     public static final String KEY_MESSAGE = "message";
 
     private Button btn_yueche,btn_huishou;
+    private List<Drivers> arrays_drivers;
+    private List<Passengers> arrays_passengers;
     private long exitTime = 0;
     private int screenWidth;
     private LocationService locationService;
@@ -122,7 +128,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     private Timer timer;
     private TimerTask task;
 
-    private String matchingKey;
+    private String matchingKey,orderNo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,7 +151,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
         checkUpdate();
 
-        MobclickAgent.enableEncrypt(true);
+        registerMessageReceiver();
 
     }
 
@@ -214,42 +220,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     }
 
     /**
-     * 初始化欢迎页
-     */
-    private void initWelcomePage(){
-        final ImageView iv_welcome;
-        iv_welcome = (ImageView) findViewById(R.id.iv_welcome);
-        iv_welcome.setVisibility(View.VISIBLE);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                AnimationSet animationSet = new AnimationSet(true);
-                AlphaAnimation alphaAnimation = new AlphaAnimation(1,0);
-                alphaAnimation.setDuration(DISAPPEAR_DELAY - APPEAR_DELAY);
-                animationSet.addAnimation(alphaAnimation);
-                iv_welcome.setAnimation(animationSet);
-            }
-        }, APPEAR_DELAY);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                iv_welcome.setVisibility(View.GONE);
-
-                try {
-                    //wifi状态检查更新
-                    if(Tools.isWifiConnected(MainActivity.this)){
-                        UpdateManager mUpdateManager = new UpdateManager(MainActivity.this);
-                        mUpdateManager.sendUpdateRequest();
-                    }
-                } catch (Exception e) {
-                }
-            }
-        }, DISAPPEAR_DELAY);
-    }
-
-    /**
      * 初始化底部操作栏viewpager
      */
     private void initControl(){
@@ -301,7 +271,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     }
                     mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder_yueche.build()));
                     mBaiduMap.clear();
-                    addMarker(mylocation);
+//                    addMarker(mylocation);
                     break;
                 case R.id.btn_huishou:
                     resetView();
@@ -316,7 +286,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                     }
                     mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder_huishou.build()));
                     mBaiduMap.clear();
-                    addMarker(mylocation);
+//                    addMarker(mylocation);
                     break;
             }
         }
@@ -394,7 +364,6 @@ public class MainActivity extends BaseActivity implements OnClickListener,
      * 获取附近车辆和人位置信息
      */
     private void getNearByUsers(){
-        Log.d(TAG,"mylocation==="+mylocation);
         if(mylocation!=null){
             Map<String, Object> params = new HashMap();
             params.put("lat", mylocation.getLatitude()+"");
@@ -432,18 +401,12 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         builder.zoom(17.9f);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         mBaiduMap.clear();
-        addMarker(mylocation);
+//        addMarker(mylocation);
     }
 
     @Override
     public void doHuishou() {
         showLoadingDialog("挥手中...",1);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                huishou();
-//            }
-//        }, 2000);
         huishou();
     }
 
@@ -459,7 +422,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         builder.zoom(18.1f);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         mBaiduMap.clear();
-        addMarker(mylocation);
+//        addMarker(mylocation);
     }
 
     /**
@@ -521,6 +484,10 @@ public class MainActivity extends BaseActivity implements OnClickListener,
 
             mBaiduMap.setMyLocationData(locData);
 
+            if(mylocation!=null){
+                getNearByUsers();
+            }
+
             if (isFirstLoc) {
 
                 isFirstLoc = false;
@@ -529,10 +496,41 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                 builder.target(ll).zoom(18.0f);
                 mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
 
-                addMarker(location);
+//                addMarker(location);
 
             }
         }
+    }
+
+    /**
+     * 添加附近司机
+     */
+    private void addDrivers(Drivers drivers){
+
+        mBaiduMap.clear();
+
+        String lat = drivers.getLat();
+        String lng = drivers.getLng();
+
+        Double dlat = Double.parseDouble(lat);
+        Double dlng = Double.parseDouble(lng);
+
+        LatLng point = new LatLng(dlat, dlng);
+        //构建Marker图标
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromResource(R.mipmap.car_bearing);
+        //构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions makeroption = new MarkerOptions()
+                .position(point).icon(bitmap).title("0");
+        //在地图上添加Marker，并显示
+        mBaiduMap.addOverlay(makeroption);
+    }
+
+    /**
+     * 添加附近挥手乘客
+     */
+    private void addPassengers(){
+
     }
 
     /**
@@ -641,12 +639,28 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                         e.printStackTrace();
                     }
                     break;
-                //获取附近车辆
+                //获取附近车辆和乘客
                 case SUCCESSCODE_QUERYNEARBYUSERS:
                     try {
                         JSONObject jsonObject = new JSONObject(message);
                         String result = jsonObject.getString("result");
-//                        Tools.showToast(MainActivity.this,message);
+                        if(Constant.RECODE_SUCCESS.equals(result)){
+
+                            JSONArray drivers = jsonObject.getJSONArray("drivers");
+                            Gson gson = new Gson();
+                            Type listType = new TypeToken<List<Drivers>>() {}.getType();
+                            arrays_drivers = gson.fromJson(drivers.toString(), listType);
+                            for(int i=0;i<arrays_drivers.size();i++){
+                                addDrivers(arrays_drivers.get(i));
+                            }
+//TODO
+//                            JSONArray passengers = jsonObject.getJSONArray("passengers");
+//                            Gson gson = new Gson();
+//                            Type listType = new TypeToken<List<Passengers>>() {}.getType();
+//                            arrays_passengers = gson.fromJson(passengers.toString(), listType);
+
+
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -863,6 +877,21 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     };
 
     /**
+     * 到达目的地按钮事件监听
+     */
+    private OnDialogClickListener arriveClickListener = new OnDialogClickListener() {
+        @Override
+        public void doConfirm() {
+            startActivityByFade(new Intent(MainActivity.this,EvaluateActivity.class),false);
+        }
+
+        @Override
+        public void doConfirm(int type) {
+
+        }
+    };
+
+    /**
      * 按两次手机返回键退出程序
      */
     @Override
@@ -943,6 +972,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onDestroy() {
         Log.d(TAG,"===onDestroy===");
+        unregisterReceiver(mMessageReceiver);
         // 关闭定位图层
         mBaiduMap.setMyLocationEnabled(false);
         mMapView.onDestroy();
@@ -976,12 +1006,13 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                         matchingKey = jsonObject.getString("matchingKey");
                         showTipsDialog("已成功为您匹配到司机，您是否已上车？",2,confirmIsTripClickListener);
                     }
-
-//                    double d_lat = Double.parseDouble(lat);
-//                    double d_lng = Double.parseDouble(lng);
-
-//                    addmarker(d_lat,d_lng);
-//                    speech();
+                    //到达，司机结束订单 乘客收到推送
+                    if(Constant.EVENT_ARRIVE.equals(event)){
+                        orderNo = jsonObject.getString("orderNo");
+                        if(orderNo!=null){
+                            showTipsDialog("您已到达目的地，请给司机评价",1,arriveClickListener);
+                        }
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

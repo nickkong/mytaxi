@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/maintitle"
+        android:background="@color/TEXT_MAIN">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_evaluate"
+            android:textColor="@color/white"
+            android:textSize="@dimen/F3"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/TEXT_BG"
+        android:padding="@dimen/interval_A">
+
+        <ImageView
+            android:id="@id/iv_driverimg"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@color/white"
+            android:layout_marginRight="@dimen/interval_A"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@id/iv_driverimg">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/TEXT_MAIN"
+                android:textSize="@dimen/F7"
+                android:text="张"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/TEXT_SUB"
+                android:textSize="@dimen/F9"
+                android:text="粤"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/TEXT_SUB"
+                android:textSize="@dimen/F9"
+                android:text="驾龄15年"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@id/iv_evaluate_good"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@color/black"/>
+            <ImageView
+                android:id="@id/iv_evaluate_bad"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@color/white"
+                android:layout_marginLeft="@dimen/interval_A"
+                android:layout_marginRight="@dimen/interval_A"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -44,6 +44,9 @@
     <item type="id" name="ll_company"/>
     <item type="id" name="tv_content"/>
     <item type="id" name="et_addresskeyword"/>
+    <item type="id" name="iv_driverimg"/>
+    <item type="id" name="iv_evaluate_good"/>
+    <item type="id" name="iv_evaluate_bad"/>
 
 
     <item type="id" name="auto_focus"/>
