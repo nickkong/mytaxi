@@ -189,7 +189,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
         BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory
                 .fromResource(R.mipmap.car_bearing);
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-                LocationMode.NORMAL, true, null));
+                LocationMode.FOLLOWING, true, null));
         //佛山 23.031033,113.131019
         //珠海 22.256915,113.562447
         LatLng ll = new LatLng(22.256915,113.562447);
@@ -653,7 +653,7 @@ public class MainActivity extends BaseActivity implements OnClickListener,
                             for(int i=0;i<arrays_drivers.size();i++){
                                 addDrivers(arrays_drivers.get(i));
                             }
-//TODO
+
 //                            JSONArray passengers = jsonObject.getJSONArray("passengers");
 //                            Gson gson = new Gson();
 //                            Type listType = new TypeToken<List<Passengers>>() {}.getType();

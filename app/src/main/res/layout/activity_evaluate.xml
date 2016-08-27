@@ -28,8 +28,8 @@
 
         <ImageView
             android:id="@id/iv_driverimg"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@color/white"
             android:layout_marginRight="@dimen/interval_A"/>
 
@@ -43,18 +43,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/TEXT_MAIN"
+                android:layout_weight="1"
                 android:textSize="@dimen/F7"
-                android:text="张"/>
+                android:text="张师傅"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/TEXT_SUB"
+                android:layout_weight="1"
                 android:textSize="@dimen/F9"
-                android:text="粤"/>
+                android:text="粤C99999"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/TEXT_SUB"
+                android:layout_weight="1"
                 android:textSize="@dimen/F9"
                 android:text="驾龄15年"/>
         </LinearLayout>
@@ -70,13 +73,13 @@
                 android:id="@id/iv_evaluate_good"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@color/black"/>
+                android:background="@mipmap/evaluate_good"/>
             <ImageView
                 android:id="@id/iv_evaluate_bad"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@color/white"
-                android:layout_marginLeft="@dimen/interval_A"
+                android:background="@mipmap/evaluate_bad"
+                android:layout_marginLeft="@dimen/interval_AA"
                 android:layout_marginRight="@dimen/interval_A"/>
         </LinearLayout>
     </RelativeLayout>
